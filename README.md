@@ -6,5 +6,7 @@ Lab2
 
 
 
-!\[workflow](https://github.com/kingman242/devops/actions/workflows/main.yml/badge.svg)
+
+
+!\[workflow](https://github.com/edinburgh-napier-devops/devops/actions/workflows/main.yml/badge.svg)
 
