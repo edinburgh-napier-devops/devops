@@ -1,5 +1,3 @@
-Readme File
-
 # DevOps
 * Master Build Status ![Develop Build Status](https://img.shields.io/github/actions/workflow/status/edinburgh-napier-devops/devops/main.yml?branch=master&style=flat-square)
 * Develop Branch Status ![Develop Build Status](https://img.shields.io/github/actions/workflow/status/edinburgh-napier-devops/devops/main.yml?branch=develop&style=flat-square)
