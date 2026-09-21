@@ -8,12 +8,6 @@
     <artifactId>DevOps</artifactId>
     <version>0.1.0.1</version>
 
-    <properties>
-        <maven.compiler.source>26</maven.compiler.source>
-        <maven.compiler.target>26</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.mongodb</groupId>
@@ -21,6 +15,12 @@
             <version>3.6.4</version>
         </dependency>
     </dependencies>
+
+    <properties>
+        <maven.compiler.source>26</maven.compiler.source>
+        <maven.compiler.target>26</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <build>
         <plugins>
@@ -50,4 +50,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
