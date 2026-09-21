@@ -80,7 +80,7 @@
 
 > _Leaders should pursue clearly defined organizational policies that are consistent with the Code and effectively communicate them to relevant stakeholders. Designing or implementing processes that deliberately or negligently violate, or tend to enable the violation of, the Code's principles is ethically unacceptable._
 
-## 21. **Create opportunities for members of the organization or group to grow as professionals.**
+## 21. **Create opportunities for members of the organization or group to grow as professionals.** 
 
 > _Educational opportunities are essential for all organizations and group members. Leaders should ensure that opportunities are available to computing professionals to help them improve their knowledge and skills in professionalism, in the practice of ethics, and in their technical specialties._
 
