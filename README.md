@@ -6,7 +6,7 @@
 
 ## Team 2
 
-- [oba-David](https://github.com/oba-David)
+- [David Andrew](https://github.com/oba-David)
 - [Hanna Hirenka](https://github.com/hannah8890)
 - [Indika Pradeep Ahangama Vithanage](https://github.com/indikapradeep-40833265)
 - [Kingsley Forbes](https://github.com/KingMan242)
