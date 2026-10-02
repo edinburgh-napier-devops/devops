@@ -1,37 +1,31 @@
 package com.napier.devops;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.util.ArrayList;
 
 public class App
 {
-    /**
-     * Connection to MySQL database.
-     */
-    private Connection con = null;
-
-    /** Main method */
     public static void main(String[] args)
     {
-        // Create new Application
         App a = new App();
-
-        // Create a database connection object
         DBConnection dbConnection = new DBConnection();
 
-        try {
-            // Connect to the database
+        try
+        {
             Connection connection = dbConnection.connect();
-            if (connection != null){
+            if (connection != null)
+            {
                 System.out.println("Successfully connected");
 
-                // Get Employee
-                EmployeeService empService = new EmployeeService(connection);
-                Employee emp = empService.getEmployee(255530);
+                UseCase1 useCase1 = new UseCase1(connection);
+                ArrayList<Employee> employees = useCase1.getAllSalaries();
+                useCase1.printSalaries(employees);
 
-                // Display results
-                empService.displayEmployee(emp);
+                if (employees != null)
+                {
+                    System.out.println(employees.size());
+                }
 
-                // Disconnect from database
                 dbConnection.disconnect(connection);
             }
         }
@@ -39,6 +33,5 @@ public class App
         {
             System.out.println(e.getMessage());
         }
-
     }
 }
