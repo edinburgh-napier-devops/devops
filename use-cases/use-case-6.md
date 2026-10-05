@@ -16,7 +16,7 @@ Primary task.
 
 ### Preconditions
 
-We know which employee is to be viewed. Database contains the employee's current details.
+The HR advisor has an employee identifier, and the employee database is available.
 
 ### Success End Condition
 
