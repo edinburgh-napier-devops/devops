@@ -21,6 +21,10 @@ public class App
                 {
                     updateEmployee(connection, args);
                 }
+                else if (args.length > 0 && "--delete-employee".equals(args[0]))
+                {
+                    deleteEmployee(connection, args);
+                }
                 else
                 {
                     UseCase1 useCase1 = new UseCase1(connection);
@@ -90,6 +94,45 @@ public class App
                 break;
             case DATABASE_ERROR:
                 System.out.println("Employee details were not updated because of a database error");
+                break;
+        }
+    }
+
+    private static void deleteEmployee(Connection connection, String[] args)
+    {
+        if (args.length != 2)
+        {
+            System.out.println("Usage: --delete-employee <employee-number>");
+            return;
+        }
+
+        int employeeNumber;
+        try
+        {
+            employeeNumber = Integer.parseInt(args[1]);
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println("Employee number must be a whole number");
+            return;
+        }
+
+        UseCase8 useCase8 = new UseCase8(connection);
+        UseCase8.DeleteResult result = useCase8.deleteEmployee(employeeNumber);
+
+        switch (result)
+        {
+            case DELETED:
+                System.out.println("Employee " + employeeNumber + " deleted successfully");
+                break;
+            case NOT_FOUND:
+                System.out.println("No employee found with number " + employeeNumber);
+                break;
+            case INVALID_INPUT:
+                System.out.println("A positive employee number is required");
+                break;
+            case DATABASE_ERROR:
+                System.out.println("Employee was not deleted because of a database error");
                 break;
         }
     }
