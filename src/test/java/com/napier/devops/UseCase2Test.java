@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -92,5 +94,41 @@ class UseCase2Test
 
         assertNotNull(employees);
         assertTrue(employees.isEmpty());
+    }
+
+    @Test
+    void printsDepartmentInHeadingWithoutRepeatedColumn()
+    {
+        Employee employee = new Employee();
+        employee.emp_no = 10001;
+        employee.first_name = "Mary";
+        employee.last_name = "Smith";
+        employee.salary = 70000;
+
+        ArrayList<Employee> employees = new ArrayList<Employee>();
+        employees.add(employee);
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        PrintStream originalOutput = System.out;
+        try
+        {
+            System.setOut(new PrintStream(output));
+            useCase2.printSalaries(employees, "Development");
+        }
+        finally
+        {
+            System.setOut(originalOutput);
+        }
+
+        String[] lines = output.toString().lines().toArray(String[]::new);
+        assertEquals("Salary report for department: Development", lines[0]);
+        assertEquals(
+                String.format("%-10s %-15s %-20s %-8s",
+                        "Emp No", "First Name", "Last Name", "Salary"),
+                lines[1]);
+        assertEquals(
+                String.format("%-10s %-15s %-20s %-8s",
+                        10001, "Mary", "Smith", 70000),
+                lines[2]);
     }
 }
