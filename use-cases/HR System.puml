@@ -1,18 +1,53 @@
 @startuml
 
-actor HR as "HR Advisor"
+left to right direction
 
-rectangle Database
+actor HR as "HR Advisor"
+actor DM as "Department Manager"
 
 rectangle "HR System" {
-    usecase UC4 as "Get salaries
-    by role"
+    ' Salary Reporting Use Cases
+    usecase UC1 as "Get Salaries of All Employees"
+    usecase UC2 as "Get Salaries by Department"
+    usecase UC3 as "Get Departmental Salaries (Own)"
+    usecase UC4 as "Get Salaries by Role"
+    usecase UCa as "Print Salaries / Report"
 
-    usecase UCa as "Print salaries"
+    ' Employee Management Use Cases
+    usecase UC5 as "Add New Employee Details"
+    usecase UC6 as "View Employee Details"
+    usecase UC7 as "Update Employee Details"
+    usecase UC8 as "Delete Employee Details"
 
-    HR - UC4
-    UC4 ..> UCa : include
-    UC4 - Database
+    ' HR Advisor Connections
+    HR -- UC1
+    HR -- UC2
+    HR -- UC4
+    HR -- UC5
+    HR -- UC6
+    HR -- UC7
+    HR -- UC8
+
+    ' Department Manager Connections
+    DM -- UC3
+
+    ' Include relationships for printing reports
+    UC1 ..> UCa : <<include>>
+    UC2 ..> UCa : <<include>>
+    UC3 ..> UCa : <<include>>
+    UC4 ..> UCa : <<include>>
 }
+
+rectangle Database as "Database System"
+
+' All data-driven use cases interact with the database backend
+UC1 -- Database
+UC2 -- Database
+UC3 -- Database
+UC4 -- Database
+UC5 -- Database
+UC6 -- Database
+UC7 -- Database
+UC8 -- Database
 
 @enduml
