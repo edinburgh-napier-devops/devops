@@ -35,3 +35,28 @@ For each feature and release, the team will:
 8. Repeat the feature cycle until the release is ready.
 9. Create a release branch from `develop`, then merge it into `master`.
 10. Tag and publish the release, then merge the release branch back into `develop`.
+
+## Update employee details
+
+Use Case 7 allows an HR advisor to correct an employee's first and last names.
+The employee number identifies the record, and the update uses a prepared SQL
+statement so supplied names are not treated as SQL.
+
+Package the application, start the database, and run the update command:
+
+```shell
+mvn package
+docker compose build app
+docker compose up -d db
+docker compose run --rm app --update-employee 10001 Mary Smith
+docker compose down
+```
+
+The command reports whether the employee was updated, was not found, contained
+invalid input, or could not be updated because of a database error.
+
+Run the automated tests with:
+
+```shell
+mvn test
+```
