@@ -36,17 +36,25 @@ A request for department salary information is sent to HR.
 
 ## MAIN SUCCESS SCENARIO
 
-1. Finance request salary information for a given department.
-2. HR advisor captures the name of the department to get salary information for.
-3. HR advisor extracts current salary information of all employees in the given department.
-4. HR advisor provides report to finance.
+1. Finance requests salary information for a given department.
+2. The HR advisor enters the name of the department.
+3. The system confirms that the department exists.
+4. The system retrieves the current salary information for employees in the department.
+5. The system produces a report identified by the department name, with each employee's number, name, and salary.
+6. The HR advisor provides the report to finance.
 
 ## EXTENSIONS
 
-3. **Department does not exist**:
-    1. HR advisor informs finance that no such department exists.
-3. **Department has no employees**:
-    1. HR advisor informs finance that the department has no employees.
+3a. **Department does not exist**:
+   1. The system informs the HR advisor that no matching department exists.
+   2. The HR advisor informs finance that no such department exists.
+
+4a. **Department has no employees**:
+   1. The system informs the HR advisor that the department has no current employees.
+   2. The HR advisor informs finance that the department has no employees.
+
+4b. **Salary information cannot be retrieved**:
+   1. The system reports that the salary report could not be produced.
 
 ## SUB-VARIATIONS
 
