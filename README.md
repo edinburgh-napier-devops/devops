@@ -7,7 +7,7 @@
 ## Team 2
 
 - [David Andrew](https://github.com/oba-David)
-- [Hanna Hirenka](https://github.com/hannah8890)
+- [Hanna Hirenka](https://github.com/Hirenka1)
 - [Indika Pradeep Ahangama Vithanage](https://github.com/indikapradeep-40833265)
 - [Kingsley Forbes](https://github.com/KingMan242)
 - [Steve Abraham](https://github.com/Stevie279)
