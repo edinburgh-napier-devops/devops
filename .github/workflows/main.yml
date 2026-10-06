@@ -1,4 +1,4 @@
-name: Test HR Report
+name: A workflow for my Hello World App
 on: push
 
 jobs:
@@ -10,13 +10,15 @@ jobs:
         uses: actions/checkout@v5
         with:
           submodules: recursive
-      - name: Set up JDK 26
+      - name: Set up JDK 11
         uses: actions/setup-java@v5
         with:
-          java-version: '26'
-          distribution: 'adopt'
-      - name: Build with Maven
-        run: mvn package
-      - name: Run docker compose
-        run: docker compose up --abort-on-container-exit
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Unit Tests
+        run: mvn -Dtest=com.napier.devops.AppTest test
+      - name: Package and Run docker compose
+        run: |
+          mvn package -DskipTests
+          docker compose up --abort-on-container-exit
 
