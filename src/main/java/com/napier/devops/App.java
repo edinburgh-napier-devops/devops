@@ -23,24 +23,17 @@ public class App
                 }
                 else
                 {
-                    UseCase1 useCase1 = new UseCase1(connection);
-                    ArrayList<Employee> employees = useCase1.getAllSalaries();
-                    useCase1.printSalaries(employees);
+                    // Use Case 4, Salary report by role
+                    UseCase4 useCase4 = new UseCase4(connection);
+                    String roleName = args.length > 0 ? args[0] : "Technique Leader";
 
-                    if (employees != null)
+                    ArrayList<Employee> roleEmployees =
+                            useCase4.getSalariesByRole(roleName);
+                    useCase4.printSalaries(roleEmployees, roleName);
+                    if (roleEmployees != null)
                     {
-                        System.out.println(employees.size());
-                    }
-
-                    String departmentName = args.length > 0 ? args[0] : "Development";
-                    UseCase2 useCase2 = new UseCase2(connection);
-                    ArrayList<Employee> departmentEmployees =
-                            useCase2.getSalariesByDepartment(departmentName);
-                    useCase2.printSalaries(departmentEmployees, departmentName);
-                    if (departmentEmployees != null)
-                    {
-                        System.out.println(departmentEmployees.size()
-                                + " employees found in " + departmentName);
+                        System.out.println(roleEmployees.size()
+                                + " employees found in " + roleName);
                     }
                 }
 
