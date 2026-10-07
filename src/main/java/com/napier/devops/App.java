@@ -21,6 +21,10 @@ public class App
                 {
                     updateEmployee(connection, args);
                 }
+                else if (args.length > 0 && "--salary-by-department".equals(args[0]))
+                {
+                    runUseCase3(connection, args);
+                }
                 else
                 {
                     // Use Case 4, Salary report by role
@@ -85,5 +89,62 @@ public class App
                 System.out.println("Employee details were not updated because of a database error");
                 break;
         }
+    }
+
+    private static void runUseCase3(Connection connection, String[] args)
+    {
+        if (args.length != 2)
+        {
+            System.out.println(
+                    "Usage: --salary-by-department <manager-employee-number>");
+            return;
+        }
+
+        int managerId;
+
+        try
+        {
+            managerId = Integer.parseInt(args[1]);
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println("Manager employee number must be a whole number");
+            return;
+        }
+
+        UseCase3 useCase3 = new UseCase3(connection);
+
+        String department = useCase3.getManagerDepartment(managerId);
+
+        if (department == null)
+        {
+            System.out.println(
+                    "No department is assigned to manager " + managerId);
+            System.out.println("Please refer to HR.");
+            return;
+        }
+
+        System.out.println(
+                "Department salary report for department " + department);
+
+        ArrayList<Employee> employees =
+                useCase3.getDepartmentSalaries(managerId);
+
+        if (employees == null)
+        {
+            System.out.println("Failed to produce salary report.");
+            return;
+        }
+
+        if (employees.isEmpty())
+        {
+            System.out.println("The department has no employees.");
+            return;
+        }
+
+        useCase3.printDepartmentSalaryReport(employees);
+
+        System.out.println(
+                employees.size() + " employees found in department " + department);
     }
 }
