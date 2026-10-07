@@ -26,7 +26,7 @@ public class UseCase2
     public ArrayList<Employee> getSalariesByDepartment(String departmentName)
     {
         String strSelect =
-                "SELECT e.emp_no, e.first_name, e.last_name, s.salary, d.dept_name "
+                "SELECT e.emp_no, e.first_name, e.last_name, s.salary "
                         + "FROM employees AS e "
                         + "INNER JOIN salaries AS s "
                         + "ON e.emp_no = s.emp_no AND s.to_date = '9999-01-01' "
@@ -51,7 +51,6 @@ public class UseCase2
                     emp.first_name = rset.getString("first_name");
                     emp.last_name = rset.getString("last_name");
                     emp.salary = rset.getInt("salary");
-                    emp.dept_name = rset.getString("dept_name");
                     employees.add(emp);
                 }
                 return employees;
@@ -80,15 +79,14 @@ public class UseCase2
         }
 
         System.out.println("Salary report for department: " + departmentName);
-        System.out.println(String.format("%-10s %-15s %-20s %-25s %-8s",
-                "Emp No", "First Name", "Last Name", "Department", "Salary"));
+        System.out.println(String.format("%-10s %-15s %-20s %-8s",
+                "Emp No", "First Name", "Last Name", "Salary"));
 
         for (Employee emp : employees)
         {
             String employeeRow =
-                    String.format("%-10s %-15s %-20s %-25s %-8s",
-                            emp.emp_no, emp.first_name, emp.last_name,
-                            emp.dept_name, emp.salary);
+                    String.format("%-10s %-15s %-20s %-8s",
+                            emp.emp_no, emp.first_name, emp.last_name, emp.salary);
             System.out.println(employeeRow);
         }
     }
