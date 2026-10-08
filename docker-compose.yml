@@ -1,4 +1,3 @@
-version: '3'
 services:
   app:
     build: .
@@ -12,7 +11,7 @@ services:
   world:
     build:
       context: ./db
-      dockerfile: db/world.Dockerfile
+      dockerfile: world.Dockerfile
     restart: always
     ports:
       - "33061:3306"
