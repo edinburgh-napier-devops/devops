@@ -30,8 +30,12 @@ public class DBConnection {
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                return DriverManager.getConnection("jdbc:mysql://hr-db:3306/employees?useSSL=false&allowPublicKeyRetrieval=true", "root", "example");
-
+                String host = System.getenv().getOrDefault("DB_HOST", "hr-db");
+                String port = System.getenv().getOrDefault("DB_PORT", "3306");
+                return DriverManager.getConnection(
+                        "jdbc:mysql://" + host + ":" + port + "/employees?useSSL=false&allowPublicKeyRetrieval=true",
+                        "root",
+                        "example");
             }
             catch (SQLException sqle)
             {
