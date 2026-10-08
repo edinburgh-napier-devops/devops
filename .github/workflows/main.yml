@@ -24,7 +24,7 @@ jobs:
         run: docker compose up --build -d db
 
       - name: Run HR reports
-        run: java -jar hr/target/DevOps-jar-with-dependencies.jar
+        run: java -jar hr/target/*-jar-with-dependencies.jar
 
       - name: Stop database
         if: always()
