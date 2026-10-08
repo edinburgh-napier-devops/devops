@@ -112,7 +112,7 @@ public class App
         return countries;
     }
 
-    // 2. All countries in a continent, largest population to smallest.
+    // 2. All countries in a continent largest population to smallest.
     public ArrayList<Country> countriesInContinent(String continent)
     {
         ArrayList<Country> countries = new ArrayList<>();
