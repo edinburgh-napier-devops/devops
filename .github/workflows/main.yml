@@ -25,6 +25,9 @@ jobs:
 
       - name: Run HR reports
         run: java -jar hr/target/*-jar-with-dependencies.jar
+        env:
+          DB_HOST: localhost
+          DB_PORT: "33060"
 
       - name: Stop database
         if: always()
