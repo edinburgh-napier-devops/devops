@@ -1,0 +1,175 @@
+@startuml
+!pragma layout smetana
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+actor User
+rectangle Database
+
+rectangle "Population System" {
+    together {
+        usecase UC1 as "UC1 All countries\nin the world"
+        usecase UC2 as "UC2 Countries\nin a continent"
+        usecase UC3 as "UC3 Countries\nin a region"
+        usecase UC4 as "UC4 Top N countries\nin the world"
+        usecase UC5 as "UC5 Top N countries\nin a continent"
+        usecase UC6 as "UC6 Top N countries\nin a region"
+    }
+    together {
+        usecase UC7 as "UC7 All cities\nin the world"
+        usecase UC8 as "UC8 Cities\nin a continent"
+        usecase UC9 as "UC9 Cities\nin a region"
+        usecase UC10 as "UC10 Cities\nin a country"
+        usecase UC11 as "UC11 Cities\nin a district"
+        usecase UC12 as "UC12 Top N cities\nin the world"
+        usecase UC13 as "UC13 Top N cities\nin a continent"
+        usecase UC14 as "UC14 Top N cities\nin a region"
+        usecase UC15 as "UC15 Top N cities\nin a country"
+        usecase UC16 as "UC16 Top N cities\nin a district"
+    }
+    together {
+        usecase UC17 as "UC17 All capital cities\nin the world"
+        usecase UC18 as "UC18 Capital cities\nin a continent"
+        usecase UC19 as "UC19 Capital cities\nin a region"
+        usecase UC20 as "UC20 Top N capitals\nin the world"
+        usecase UC21 as "UC21 Top N capitals\nin a continent"
+        usecase UC22 as "UC22 Top N capitals\nin a region"
+    }
+    together {
+        usecase UC23 as "UC23 City and non-city\npopulation by continent"
+        usecase UC24 as "UC24 City and non-city\npopulation by region"
+        usecase UC25 as "UC25 City and non-city\npopulation by country"
+    }
+    together {
+        usecase UC26 as "UC26 Population\nof the world"
+        usecase UC27 as "UC27 Population\nof a continent"
+        usecase UC28 as "UC28 Population\nof a region"
+        usecase UC29 as "UC29 Population\nof a country"
+        usecase UC30 as "UC30 Population\nof a district"
+        usecase UC31 as "UC31 Population\nof a city"
+        usecase UC32 as "UC32 Language speakers"
+    }
+
+    usecase CountryReport as "Produce country report"
+    usecase CityReport as "Produce city report"
+    usecase CapitalReport as "Produce capital report"
+    usecase PopReport as "Produce population report"
+    usecase CapturePlace as "Capture place name"
+    usecase CaptureN as "Capture N"
+    usecase Percent as "Calculate percentage"
+
+    UC1 ..> CountryReport : include
+    UC2 ..> CountryReport : include
+    UC3 ..> CountryReport : include
+    UC4 ..> CountryReport : include
+    UC5 ..> CountryReport : include
+    UC6 ..> CountryReport : include
+
+    UC7 ..> CityReport : include
+    UC8 ..> CityReport : include
+    UC9 ..> CityReport : include
+    UC10 ..> CityReport : include
+    UC11 ..> CityReport : include
+    UC12 ..> CityReport : include
+    UC13 ..> CityReport : include
+    UC14 ..> CityReport : include
+    UC15 ..> CityReport : include
+    UC16 ..> CityReport : include
+
+    UC17 ..> CapitalReport : include
+    UC18 ..> CapitalReport : include
+    UC19 ..> CapitalReport : include
+    UC20 ..> CapitalReport : include
+    UC21 ..> CapitalReport : include
+    UC22 ..> CapitalReport : include
+
+    UC23 ..> PopReport : include
+    UC24 ..> PopReport : include
+    UC25 ..> PopReport : include
+    UC23 ..> Percent : include
+    UC24 ..> Percent : include
+    UC25 ..> Percent : include
+    UC32 ..> Percent : include
+
+    UC2 ..> CapturePlace : include
+    UC3 ..> CapturePlace : include
+    UC5 ..> CapturePlace : include
+    UC6 ..> CapturePlace : include
+    UC8 ..> CapturePlace : include
+    UC9 ..> CapturePlace : include
+    UC10 ..> CapturePlace : include
+    UC11 ..> CapturePlace : include
+    UC13 ..> CapturePlace : include
+    UC14 ..> CapturePlace : include
+    UC15 ..> CapturePlace : include
+    UC16 ..> CapturePlace : include
+    UC18 ..> CapturePlace : include
+    UC19 ..> CapturePlace : include
+    UC21 ..> CapturePlace : include
+    UC22 ..> CapturePlace : include
+    UC27 ..> CapturePlace : include
+    UC28 ..> CapturePlace : include
+    UC29 ..> CapturePlace : include
+    UC30 ..> CapturePlace : include
+    UC31 ..> CapturePlace : include
+
+    UC4 ..> CaptureN : include
+    UC5 ..> CaptureN : include
+    UC6 ..> CaptureN : include
+    UC12 ..> CaptureN : include
+    UC13 ..> CaptureN : include
+    UC14 ..> CaptureN : include
+    UC15 ..> CaptureN : include
+    UC16 ..> CaptureN : include
+    UC20 ..> CaptureN : include
+    UC21 ..> CaptureN : include
+    UC22 ..> CaptureN : include
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+User --> UC10
+User --> UC11
+User --> UC12
+User --> UC13
+User --> UC14
+User --> UC15
+User --> UC16
+User --> UC17
+User --> UC18
+User --> UC19
+User --> UC20
+User --> UC21
+User --> UC22
+User --> UC23
+User --> UC24
+User --> UC25
+User --> UC26
+User --> UC27
+User --> UC28
+User --> UC29
+User --> UC30
+User --> UC31
+User --> UC32
+
+CountryReport --> Database
+CityReport --> Database
+CapitalReport --> Database
+PopReport --> Database
+UC26 --> Database
+UC27 --> Database
+UC28 --> Database
+UC29 --> Database
+UC30 --> Database
+UC31 --> Database
+UC32 --> Database
+
+@enduml
