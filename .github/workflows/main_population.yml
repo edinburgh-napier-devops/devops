@@ -1,9 +1,9 @@
-name: Test HR Report
-on: workflow_dispatch
+name: Test Population Report
+on: push
 
 jobs:
   build:
-    name: Build and run HR module
+    name: Build and run population module
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -17,14 +17,14 @@ jobs:
           java-version: '26'
           distribution: 'adopt'
 
-      - name: Build HR module
-        run: mvn -pl hr -am package
+      - name: Build population module
+        run: mvn -pl population -am package
 
-      - name: Start employees database
-        run: docker compose up --build -d db
+      - name: Start world database
+        run: docker compose up --build -d world
 
-      - name: Run HR reports
-        run: java -jar hr/target/DevOps-jar-with-dependencies.jar
+      - name: Run population reports
+        run: java -jar population/target/PopulationDevOps-jar-with-dependencies.jar
 
       - name: Stop database
         if: always()
