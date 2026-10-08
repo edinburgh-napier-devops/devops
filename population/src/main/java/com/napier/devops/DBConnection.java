@@ -25,8 +25,10 @@ public class DBConnection
             try
             {
                 Thread.sleep(30000);
+                String host = System.getenv().getOrDefault("DB_HOST", "world-db");
+                String port = System.getenv().getOrDefault("DB_PORT", "3306");
                 return DriverManager.getConnection(
-                        "jdbc:mysql://world-db:3306/world?useSSL=false&allowPublicKeyRetrieval=true",
+                        "jdbc:mysql://" + host + ":" + port + "/world?useSSL=false&allowPublicKeyRetrieval=true",
                         "root",
                         "example");
             }
