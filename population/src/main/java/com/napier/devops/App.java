@@ -46,7 +46,7 @@ public class App
                 app.printCountryReport(continentCountries);
 
                 // Report 3: countries in a region.
-                System.out.println("\n \n  3: countries in a region");
+                System.out.println("\n \n Report 3: countries in a region");
                 ArrayList<Country> regionCountries = app.countriesInRegion("Southern and Central Asia");
                 app.printCountryReport(regionCountries);
 
