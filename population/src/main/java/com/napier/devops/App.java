@@ -8,6 +8,13 @@ import java.util.ArrayList;
 
 /**
  * Population reports. Each report method has a comment where its SQL should go.
+ * 1. Assign a report from the current Zube sprint to yourself first.
+ * 2. Work on the report, test and commit as a new feature.
+ * 3. Promote feature up through dev then release ensuring build is successful in GitHub.
+ * 4. Create a new release number.
+ * 5. Merge into master.
+ * 6. Close GitHub issue.
+ * 7. Move complete ticket in Zube to done.
  */
 public class App
 {
@@ -42,6 +49,11 @@ public class App
                 System.out.println("\n \n  3: countries in a region");
                 ArrayList<Country> regionCountries = app.countriesInRegion("Southern and Central Asia");
                 app.printCountryReport(regionCountries);
+
+                // Report 4: top N countries in the world. Change 10 to the N to test.
+                System.out.println("\n \n Report 4: top N countries in the world");
+                ArrayList<Country> topCountries = app.topCountriesInWorld(10);
+                app.printCountryReport(topCountries);
             }
             catch (Exception e)
             {
@@ -195,8 +207,36 @@ public class App
     // 4. Top N countries in the world.
     public ArrayList<Country> topCountriesInWorld(int n)
     {
-        // SQL: same country columns, order by population desc limit n.
-        return null;
+        ArrayList<Country> countries = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT country.Code, country.Name, country.Continent, country.Region, "
+                            + "country.Population, city.Name AS Capital "
+                            + "FROM country "
+                            + "LEFT JOIN city ON country.Capital = city.ID "
+                            + "ORDER BY country.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                countries.add(new Country(
+                        rset.getString("Code"),
+                        rset.getString("Name"),
+                        rset.getString("Continent"),
+                        rset.getString("Region"),
+                        rset.getLong("Population"),
+                        rset.getString("Capital")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return countries;
     }
 
     // 5. Top N countries in a continent.
