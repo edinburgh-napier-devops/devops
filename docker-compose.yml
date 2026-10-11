@@ -15,3 +15,13 @@ services:
     restart: always
     ports:
       - "33061:3306"
+
+  population:
+    build:
+      context: .
+      dockerfile: population.Dockerfile
+    environment:
+      DB_HOST: world
+      DB_PORT: "3306"
+    depends_on:
+      - world

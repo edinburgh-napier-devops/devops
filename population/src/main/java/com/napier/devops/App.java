@@ -29,12 +29,19 @@ public class App
             {
                 // Change this block to test a report. Call the report method, then its print method.
                 // Report 1: all countries in the world.
+                System.out.println("Report 1: all countries in the world");
                 ArrayList<Country> countries = app.allCountriesInWorld();
                 app.printCountryReport(countries);
 
                 // Report 2: countries in a continent. Change "Europe" to the continent to test.
+                System.out.println("\n \n Report 2: countries in a continent");
                 ArrayList<Country> continentCountries = app.countriesInContinent("Europe");
                 app.printCountryReport(continentCountries);
+
+                // Report 3: countries in a region.
+                System.out.println("\n \n  3: countries in a region");
+                ArrayList<Country> regionCountries = app.countriesInRegion("Southern and Central Asia");
+                app.printCountryReport(regionCountries);
             }
             catch (Exception e)
             {
@@ -148,10 +155,41 @@ public class App
     }
 
     // 3. All countries in a region, largest population to smallest.
+    // SQL: same country columns, where region = region, order by population desc.
+    // return null if error, else return ArrayList of countries.
     public ArrayList<Country> countriesInRegion(String region)
     {
-        // SQL: same country columns, where region = region, order by population desc.
-        return null;
+        ArrayList<Country> countries = new ArrayList<>();
+        try
+        {
+            // retrive data from Region, population in descending order
+            String sql =
+                    "SELECT country.Code, country.Name, country.Continent, country.Region, "
+                            + "country.Population, city.Name AS Capital "
+                            + "FROM country "
+                            + "LEFT JOIN city ON country.Capital = city.ID "
+                            + "WHERE country.Region = ? "
+                            + "ORDER BY country.Population DESC";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, region);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                countries.add(new Country(
+                        rset.getString("Code"),
+                        rset.getString("Name"),
+                        rset.getString("Continent"),
+                        rset.getString("Region"),
+                        rset.getLong("Population"),
+                        rset.getString("Capital")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return countries;
     }
 
     // 4. Top N countries in the world.
