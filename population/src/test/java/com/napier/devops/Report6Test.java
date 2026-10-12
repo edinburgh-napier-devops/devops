@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class Report6Test
 {
@@ -66,5 +67,25 @@ class Report6Test
         assertEquals(1, countries.size());
         assertEquals("India", countries.get(0).getName());
         assertEquals(1013662000L, countries.get(0).getPopulation());
+    }
+
+    @Test
+    void rejectsMissingRegion()
+    {
+        assertNull(app.topCountriesInRegion(null, 10));
+        assertNull(app.topCountriesInRegion("   ", 10));
+    }
+
+    @Test
+    void rejectsNonPositiveLimit()
+    {
+        assertNull(app.topCountriesInRegion("Southern and Central Asia", 0));
+        assertNull(app.topCountriesInRegion("Southern and Central Asia", -1));
+    }
+
+    @Test
+    void returnsNoReportForUnknownRegion()
+    {
+        assertNull(app.topCountriesInRegion("Unknown Region", 10));
     }
 }
