@@ -285,6 +285,17 @@ public class App
     // 6. Top N countries in a region.
     public ArrayList<Country> topCountriesInRegion(String region, int n)
     {
+        if (region == null || region.trim().isEmpty())
+        {
+            System.out.println("A region must be provided");
+            return null;
+        }
+        if (n <= 0)
+        {
+            System.out.println("N must be a positive whole number");
+            return null;
+        }
+
         ArrayList<Country> countries = new ArrayList<>();
         try
         {
@@ -309,6 +320,11 @@ public class App
                         rset.getString("Region"),
                         rset.getLong("Population"),
                         rset.getString("Capital")));
+            }
+            if (countries.isEmpty())
+            {
+                System.out.println("No countries found for region: " + region);
+                return null;
             }
         }
         catch (Exception e)
