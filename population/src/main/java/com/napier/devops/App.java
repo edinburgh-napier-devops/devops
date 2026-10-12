@@ -285,8 +285,38 @@ public class App
     // 6. Top N countries in a region.
     public ArrayList<Country> topCountriesInRegion(String region, int n)
     {
-        // SQL: same country columns, where region = region, order by population desc limit n.
-        return null;
+        ArrayList<Country> countries = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT country.Code, country.Name, country.Continent, country.Region, "
+                            + "country.Population, city.Name AS Capital "
+                            + "FROM country "
+                            + "LEFT JOIN city ON country.Capital = city.ID "
+                            + "WHERE country.Region = ? "
+                            + "ORDER BY country.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, region);
+            stmt.setInt(2, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                countries.add(new Country(
+                        rset.getString("Code"),
+                        rset.getString("Name"),
+                        rset.getString("Continent"),
+                        rset.getString("Region"),
+                        rset.getLong("Population"),
+                        rset.getString("Capital")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return countries;
     }
 
     // 7. All cities in the world, largest population to smallest.
