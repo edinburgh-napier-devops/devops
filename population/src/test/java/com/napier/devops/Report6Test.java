@@ -56,4 +56,15 @@ class Report6Test
         assertEquals(1013662000L, countries.get(0).getPopulation());
         assertEquals("New Delhi", countries.get(0).getCapital());
     }
+
+    @Test
+    void limitsResultsAfterOrderingByPopulation()
+    {
+        ArrayList<Country> countries = app.topCountriesInRegion("Southern and Central Asia", 1);
+
+        assertNotNull(countries);
+        assertEquals(1, countries.size());
+        assertEquals("India", countries.get(0).getName());
+        assertEquals(1013662000L, countries.get(0).getPopulation());
+    }
 }
