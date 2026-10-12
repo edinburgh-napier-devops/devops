@@ -54,6 +54,12 @@ public class App
                 System.out.println("\n \n Report 4: top N countries in the world");
                 ArrayList<Country> topCountries = app.topCountriesInWorld(10);
                 app.printCountryReport(topCountries);
+
+                // Report 5: top N countries in the continent.
+                // Change "Asia" to the continent and 10 to the N to test.
+                System.out.println("\n \n Report 5: top N countries in the continent.");
+                ArrayList<Country> topCountriesInContinent = app.topCountriesInContinent("Asia",10);
+                app.printCountryReport(topCountriesInContinent);
             }
             catch (Exception e)
             {
@@ -242,8 +248,38 @@ public class App
     // 5. Top N countries in a continent.
     public ArrayList<Country> topCountriesInContinent(String continent, int n)
     {
-        // SQL: same country columns, where continent = continent, order by population desc limit n.
-        return null;
+        ArrayList<Country> countries = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT country.Code, country.Name, country.Continent, country.Region, "
+                            + "country.Population, city.Name AS Capital "
+                            + "FROM country "
+                            + "LEFT JOIN city ON country.Capital = city.ID "
+                            + "WHERE country.Continent = ? "
+                            + "ORDER BY country.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, continent);
+            stmt.setInt(2, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                countries.add(new Country(
+                        rset.getString("Code"),
+                        rset.getString("Name"),
+                        rset.getString("Continent"),
+                        rset.getString("Region"),
+                        rset.getLong("Population"),
+                        rset.getString("Capital")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return countries;
     }
 
     // 6. Top N countries in a region.
