@@ -23,6 +23,11 @@ public class App
     public App() {
     }
 
+    public App(Connection con)
+    {
+        this.con = con;
+    }
+
     public static void main(String[] args)
     {
         DBConnection dbConnection = new DBConnection();
