@@ -418,8 +418,43 @@ public class App
     // 25. Population in cities and not in cities, for each country.
     public ArrayList<Population> populationByCountry()
     {
-        // SQL: country name, country population, sum of city population, non-city population and percentages.
-        return null;
+        ArrayList<Population> populations = new ArrayList<>();
+
+        String sql =
+                "SELECT country.Name AS CountryName, " +
+                        "country.Population AS TotalPopulation, " +
+                        "COALESCE(SUM(city.Population), 0) AS CityPopulation, " +
+                        "country.Population - COALESCE(SUM(city.Population), 0) " +
+                        "    AS NonCityPopulation, " +
+                        "CASE WHEN country.Population > 0 THEN " +
+                        "    100.0 * COALESCE(SUM(city.Population), 0) " +
+                        "    / country.Population " +
+                        "    ELSE 0 END AS CityPercentage, " +
+                        "CASE WHEN country.Population > 0 THEN " +
+                        "    100.0 * (country.Population " +
+                        "    - COALESCE(SUM(city.Population), 0)) " +
+                        "    / country.Population " +
+                        "    ELSE 0 END AS NonCityPercentage " +
+                        "FROM country " +
+                        "LEFT JOIN city ON city.CountryCode = country.Code " +
+                        "GROUP BY country.Code, country.Name, country.Population " +
+                        "ORDER BY country.Name";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rset = stmt.executeQuery())
+        {
+            while (rset.next())
+            {
+                //Map each result row to Population object here.
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        return populations;
     }
 
     // 26. Population of the world.
