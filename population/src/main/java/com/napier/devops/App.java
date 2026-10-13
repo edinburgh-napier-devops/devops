@@ -60,6 +60,12 @@ public class App
                 System.out.println("\n \n Report 5: top N countries in the continent.");
                 ArrayList<Country> topCountriesInContinent = app.topCountriesInContinent("Asia",10);
                 app.printCountryReport(topCountriesInContinent);
+
+                // Report 25: Population by country.
+                System.out.println("\n\nReport 25: Population by country");
+                ArrayList<Population> populations =
+                        app.populationByCountry();
+                app.printPopulationReport(populations);
             }
             catch (Exception e)
             {
