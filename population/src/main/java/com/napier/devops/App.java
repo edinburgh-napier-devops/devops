@@ -107,7 +107,34 @@ public class App
     }
 
     public void printPopulationReport(ArrayList<Population> populations) {
-        // Name, total population, population in cities and percentage, population not in cities and percentage.
+        if (populations == null)
+        {
+            System.out.println("No population report produced");
+            return;
+        }
+
+        System.out.println(String.format(
+                "%-35s %18s %18s %12s %18s %12s",
+                "Country",
+                "Total Population",
+                "In Cities",
+                "% In Cities",
+                "Not In Cities",
+                "% Not In Cities"
+        ));
+
+        for (Population population : populations)
+        {
+            System.out.println(String.format(
+                    "%-35s %18d %18d %11.2f%% %18d %11.2f%%",
+                    population.getName(),
+                    population.getTotalPopulation(),
+                    population.getPopulationInCities(),
+                    population.getPercentageInCities(),
+                    population.getPopulationNotInCities(),
+                    population.getPercentageNotInCities()
+            ));
+        }
     }
 
     // 1. All countries in the world, largest population to smallest.
@@ -451,7 +478,16 @@ public class App
         {
             while (rset.next())
             {
-                //Map each result row to Population object here.
+                Population population = new Population(
+                        rset.getString("CountryName"),
+                        rset.getLong("TotalPopulation"),
+                        rset.getLong("CityPopulation"),
+                        rset.getDouble("CityPercentage"),
+                        rset.getLong("NonCityPopulation"),
+                        rset.getDouble("NonCityPercentage")
+                );
+
+                populations.add(population);
             }
         }
         catch (Exception e)
