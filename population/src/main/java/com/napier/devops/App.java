@@ -23,6 +23,11 @@ public class App
     public App() {
     }
 
+    public App(Connection con)
+    {
+        this.con = con;
+    }
+
     public static void main(String[] args)
     {
         DBConnection dbConnection = new DBConnection();
@@ -60,6 +65,13 @@ public class App
                 System.out.println("\n \n Report 5: top N countries in the continent.");
                 ArrayList<Country> topCountriesInContinent = app.topCountriesInContinent("Asia",10);
                 app.printCountryReport(topCountriesInContinent);
+
+                // Report 6: top N countries in a region.
+                // Change "Southern and Central Asia" to the region and 10 to the N to test.
+                System.out.println("\n \n Report 6: top N countries in a region.");
+                ArrayList<Country> topCountriesInRegion =
+                        app.topCountriesInRegion("Southern and Central Asia", 10);
+                app.printCountryReport(topCountriesInRegion);
 
                 // Report 8: cities in a continent. Change "Europe" to the continent to test.
                 System.out.println("\n \n Report 8: cities in a continent");
@@ -319,8 +331,54 @@ public class App
     // 6. Top N countries in a region.
     public ArrayList<Country> topCountriesInRegion(String region, int n)
     {
-        // SQL: same country columns, where region = region, order by population desc limit n.
-        return null;
+        if (region == null || region.trim().isEmpty())
+        {
+            System.out.println("A region must be provided");
+            return null;
+        }
+        if (n <= 0)
+        {
+            System.out.println("N must be a positive whole number");
+            return null;
+        }
+
+        ArrayList<Country> countries = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT country.Code, country.Name, country.Continent, country.Region, "
+                            + "country.Population, city.Name AS Capital "
+                            + "FROM country "
+                            + "LEFT JOIN city ON country.Capital = city.ID "
+                            + "WHERE country.Region = ? "
+                            + "ORDER BY country.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, region);
+            stmt.setInt(2, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                countries.add(new Country(
+                        rset.getString("Code"),
+                        rset.getString("Name"),
+                        rset.getString("Continent"),
+                        rset.getString("Region"),
+                        rset.getLong("Population"),
+                        rset.getString("Capital")));
+            }
+            if (countries.isEmpty())
+            {
+                System.out.println("No countries found for region: " + region);
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return countries;
     }
 
     // 7. All cities in the world, largest population to smallest.
