@@ -75,6 +75,11 @@ public class App
                 System.out.println("\n \n Report 10: cities in a country");
                 ArrayList<City> countryCities = app.citiesInCountry("United Kingdom");
                 app.printCityReport(countryCities);
+
+                // Report 11: cities in a district. Change the district name to test.
+                System.out.println("\n \n Report 11: cities in a district");
+                ArrayList<City> districtCities = app.citiesInDistrict("England");
+                app.printCityReport(districtCities);
             }
             catch (Exception e)
             {
@@ -433,8 +438,36 @@ public class App
     // 11. All cities in a district, largest population to smallest.
     public ArrayList<City> citiesInDistrict(String district)
     {
-        // SQL: cities where district = district, order by population desc.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "WHERE city.District = ? "
+                            + "ORDER BY city.Population DESC";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, district);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 12. Top N cities in the world.
