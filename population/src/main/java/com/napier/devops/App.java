@@ -72,7 +72,7 @@ public class App
                 ArrayList<Country> topCountriesInRegion =
                         app.topCountriesInRegion("Southern and Central Asia", 10);
                 app.printCountryReport(topCountriesInRegion);
-
+              
                 // Report 8: cities in a continent. Change "Europe" to the continent to test.
                 System.out.println("\n \n Report 8: cities in a continent");
                 ArrayList<City> continentCities = app.citiesInContinent("Europe");
@@ -92,6 +92,12 @@ public class App
                 System.out.println("\n \n Report 11: cities in a district");
                 ArrayList<City> districtCities = app.citiesInDistrict("England");
                 app.printCityReport(districtCities);
+              
+                // Report 25: Population by country.
+                System.out.println("\n\nReport 25: Population by country");
+                ArrayList<Population> populations = app.populationByCountry();
+                app.printPopulationReport(populations);
+              
             }
             catch (Exception e)
             {
@@ -147,7 +153,34 @@ public class App
     }
 
     public void printPopulationReport(ArrayList<Population> populations) {
-        // Name, total population, population in cities and percentage, population not in cities and percentage.
+        if (populations == null)
+        {
+            System.out.println("No population report produced");
+            return;
+        }
+
+        System.out.println(String.format(
+                "%-35s %18s %18s %12s %18s %12s",
+                "Country",
+                "Total Population",
+                "In Cities",
+                "% In Cities",
+                "Not In Cities",
+                "% Not In Cities"
+        ));
+
+        for (Population population : populations)
+        {
+            System.out.println(String.format(
+                    "%-35s %18d %18d %11.2f%% %18d %11.2f%%",
+                    population.getName(),
+                    population.getTotalPopulation(),
+                    population.getPopulationInCities(),
+                    population.getPercentageInCities(),
+                    population.getPopulationNotInCities(),
+                    population.getPercentageNotInCities()
+            ));
+        }
     }
 
     // 1. All countries in the world, largest population to smallest.
@@ -622,8 +655,52 @@ public class App
     // 25. Population in cities and not in cities, for each country.
     public ArrayList<Population> populationByCountry()
     {
-        // SQL: country name, country population, sum of city population, non-city population and percentages.
-        return null;
+        ArrayList<Population> populations = new ArrayList<>();
+
+        String sql =
+                "SELECT country.Name AS CountryName, " +
+                        "country.Population AS TotalPopulation, " +
+                        "COALESCE(SUM(city.Population), 0) AS CityPopulation, " +
+                        "country.Population - COALESCE(SUM(city.Population), 0) " +
+                        "    AS NonCityPopulation, " +
+                        "CASE WHEN country.Population > 0 THEN " +
+                        "    100.0 * COALESCE(SUM(city.Population), 0) " +
+                        "    / country.Population " +
+                        "    ELSE 0 END AS CityPercentage, " +
+                        "CASE WHEN country.Population > 0 THEN " +
+                        "    100.0 * (country.Population " +
+                        "    - COALESCE(SUM(city.Population), 0)) " +
+                        "    / country.Population " +
+                        "    ELSE 0 END AS NonCityPercentage " +
+                        "FROM country " +
+                        "LEFT JOIN city ON city.CountryCode = country.Code " +
+                        "GROUP BY country.Code, country.Name, country.Population " +
+                        "ORDER BY country.Name";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rset = stmt.executeQuery())
+        {
+            while (rset.next())
+            {
+                Population population = new Population(
+                        rset.getString("CountryName"),
+                        rset.getLong("TotalPopulation"),
+                        rset.getLong("CityPopulation"),
+                        rset.getDouble("CityPercentage"),
+                        rset.getLong("NonCityPopulation"),
+                        rset.getDouble("NonCityPercentage")
+                );
+
+                populations.add(population);
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        return populations;
     }
 
     // 26. Population of the world.
