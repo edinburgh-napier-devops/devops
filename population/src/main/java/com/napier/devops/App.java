@@ -60,6 +60,11 @@ public class App
                 System.out.println("\n \n Report 5: top N countries in the continent.");
                 ArrayList<Country> topCountriesInContinent = app.topCountriesInContinent("Asia",10);
                 app.printCountryReport(topCountriesInContinent);
+
+                // Report 7: all cities in the world.
+                System.out.println("\n \n Report 7: all cities in the world");
+                ArrayList<City> allCities = app.allCitiesInWorld();
+                app.printCityReport(allCities);
             }
             catch (Exception e)
             {
@@ -93,7 +98,21 @@ public class App
     }
 
     public void printCityReport(ArrayList<City> cities) {
-        // Name, country, district, population.
+        if (cities == null)
+        {
+            System.out.println("No city report produced");
+            return;
+        }
+        System.out.println(String.format("%-35s %-30s %-20s %s",
+                "Name", "Country", "District", "Population"));
+        for (City city : cities)
+        {
+            System.out.println(String.format("%-35s %-30s %-20s %d",
+                    city.getName(),
+                    city.getCountryName(),
+                    city.getDistrict(),
+                    city.getPopulation()));
+        }
     }
 
     public void printCapitalReport(ArrayList<City> capitals) {
@@ -292,8 +311,34 @@ public class App
     // 7. All cities in the world, largest population to smallest.
     public ArrayList<City> allCitiesInWorld()
     {
-        // SQL: select city name, country name, district, population order by population desc.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            Statement stmt = con.createStatement();
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "ORDER BY city.Population DESC";
+            ResultSet rset = stmt.executeQuery(sql);
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 8. All cities in a continent, largest population to smallest.
