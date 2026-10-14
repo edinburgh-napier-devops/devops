@@ -44,13 +44,15 @@ The user requests the top N countries in a region.
 
 ## EXTENSIONS
 
-3. **Region does not exist**:
-
-    1. User informs the organisation that no such region exists.
-
 2. **N is missing or not a positive whole number**:
 
     1. User informs the organisation that N must be a positive whole number.
+
+    2. Use case ends.
+
+3. **Region does not exist**:
+
+    1. User informs the organisation that no such region exists.
 
     2. Use case ends.
 

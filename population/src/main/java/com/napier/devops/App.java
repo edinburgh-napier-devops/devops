@@ -23,6 +23,11 @@ public class App
     public App() {
     }
 
+    public App(Connection con)
+    {
+        this.con = con;
+    }
+
     public static void main(String[] args)
     {
         DBConnection dbConnection = new DBConnection();
@@ -61,10 +66,42 @@ public class App
                 ArrayList<Country> topCountriesInContinent = app.topCountriesInContinent("Asia",10);
                 app.printCountryReport(topCountriesInContinent);
 
+                // Report 6: top N countries in a region.
+                // Change "Southern and Central Asia" to the region and 10 to the N to test.
+                System.out.println("\n \n Report 6: top N countries in a region.");
+                ArrayList<Country> topCountriesInRegion =
+                        app.topCountriesInRegion("Southern and Central Asia", 10);
+                app.printCountryReport(topCountriesInRegion);
+
                 // Report 7: all cities in the world.
                 System.out.println("\n \n Report 7: all cities in the world");
                 ArrayList<City> allCities = app.allCitiesInWorld();
                 app.printCityReport(allCities);
+
+                // Report 8: cities in a continent. Change "Europe" to the continent to test.
+                System.out.println("\n \n Report 8: cities in a continent");
+                ArrayList<City> continentCities = app.citiesInContinent("Europe");
+                app.printCityReport(continentCities);
+
+                // Report 9: cities in a region. Change the region name to test.
+                System.out.println("\n \n Report 9: cities in a region");
+                ArrayList<City> regionCities = app.citiesInRegion("British Islands");
+                app.printCityReport(regionCities);
+
+                // Report 10: cities in a country. Change the country name to test.
+                System.out.println("\n \n Report 10: cities in a country");
+                ArrayList<City> countryCities = app.citiesInCountry("United Kingdom");
+                app.printCityReport(countryCities);
+
+                // Report 11: cities in a district. Change the district name to test.
+                System.out.println("\n \n Report 11: cities in a district");
+                ArrayList<City> districtCities = app.citiesInDistrict("England");
+                app.printCityReport(districtCities);
+
+                // Report 25: Population by country.
+                System.out.println("\n\nReport 25: Population by country");
+                ArrayList<Population> populations = app.populationByCountry();
+                app.printPopulationReport(populations);
             }
             catch (Exception e)
             {
@@ -103,11 +140,11 @@ public class App
             System.out.println("No city report produced");
             return;
         }
-        System.out.println(String.format("%-35s %-30s %-20s %s",
+        System.out.println(String.format("%-40s %-40s %-25s %s",
                 "Name", "Country", "District", "Population"));
         for (City city : cities)
         {
-            System.out.println(String.format("%-35s %-30s %-20s %d",
+            System.out.println(String.format("%-40s %-40s %-25s %d",
                     city.getName(),
                     city.getCountryName(),
                     city.getDistrict(),
@@ -120,7 +157,34 @@ public class App
     }
 
     public void printPopulationReport(ArrayList<Population> populations) {
-        // Name, total population, population in cities and percentage, population not in cities and percentage.
+        if (populations == null)
+        {
+            System.out.println("No population report produced");
+            return;
+        }
+
+        System.out.println(String.format(
+                "%-35s %18s %18s %12s %18s %12s",
+                "Country",
+                "Total Population",
+                "In Cities",
+                "% In Cities",
+                "Not In Cities",
+                "% Not In Cities"
+        ));
+
+        for (Population population : populations)
+        {
+            System.out.println(String.format(
+                    "%-35s %18d %18d %11.2f%% %18d %11.2f%%",
+                    population.getName(),
+                    population.getTotalPopulation(),
+                    population.getPopulationInCities(),
+                    population.getPercentageInCities(),
+                    population.getPopulationNotInCities(),
+                    population.getPercentageNotInCities()
+            ));
+        }
     }
 
     // 1. All countries in the world, largest population to smallest.
@@ -304,8 +368,54 @@ public class App
     // 6. Top N countries in a region.
     public ArrayList<Country> topCountriesInRegion(String region, int n)
     {
-        // SQL: same country columns, where region = region, order by population desc limit n.
-        return null;
+        if (region == null || region.trim().isEmpty())
+        {
+            System.out.println("A region must be provided");
+            return null;
+        }
+        if (n <= 0)
+        {
+            System.out.println("N must be a positive whole number");
+            return null;
+        }
+
+        ArrayList<Country> countries = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT country.Code, country.Name, country.Continent, country.Region, "
+                            + "country.Population, city.Name AS Capital "
+                            + "FROM country "
+                            + "LEFT JOIN city ON country.Capital = city.ID "
+                            + "WHERE country.Region = ? "
+                            + "ORDER BY country.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, region);
+            stmt.setInt(2, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                countries.add(new Country(
+                        rset.getString("Code"),
+                        rset.getString("Name"),
+                        rset.getString("Continent"),
+                        rset.getString("Region"),
+                        rset.getLong("Population"),
+                        rset.getString("Capital")));
+            }
+            if (countries.isEmpty())
+            {
+                System.out.println("No countries found for region: " + region);
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return countries;
     }
 
     // 7. All cities in the world, largest population to smallest.
@@ -344,29 +454,141 @@ public class App
     // 8. All cities in a continent, largest population to smallest.
     public ArrayList<City> citiesInContinent(String continent)
     {
-        // SQL: cities joined to country, where continent = continent, order by population desc.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "WHERE country.Continent = ? "
+                            + "ORDER BY city.Population DESC";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, continent);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 9. All cities in a region, largest population to smallest.
     public ArrayList<City> citiesInRegion(String region)
     {
-        // SQL: cities joined to country, where region = region, order by population desc.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "WHERE country.Region = ? "
+                            + "ORDER BY city.Population DESC";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, region);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 10. All cities in a country, largest population to smallest.
     public ArrayList<City> citiesInCountry(String country)
     {
-        // SQL: cities for the given country, order by population desc.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "WHERE country.Name = ? "
+                            + "ORDER BY city.Population DESC";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, country);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 11. All cities in a district, largest population to smallest.
     public ArrayList<City> citiesInDistrict(String district)
     {
-        // SQL: cities where district = district, order by population desc.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "WHERE city.District = ? "
+                            + "ORDER BY city.Population DESC";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, district);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 12. Top N cities in the world.
@@ -463,8 +685,52 @@ public class App
     // 25. Population in cities and not in cities, for each country.
     public ArrayList<Population> populationByCountry()
     {
-        // SQL: country name, country population, sum of city population, non-city population and percentages.
-        return null;
+        ArrayList<Population> populations = new ArrayList<>();
+
+        String sql =
+                "SELECT country.Name AS CountryName, " +
+                        "country.Population AS TotalPopulation, " +
+                        "COALESCE(SUM(city.Population), 0) AS CityPopulation, " +
+                        "country.Population - COALESCE(SUM(city.Population), 0) " +
+                        "    AS NonCityPopulation, " +
+                        "CASE WHEN country.Population > 0 THEN " +
+                        "    100.0 * COALESCE(SUM(city.Population), 0) " +
+                        "    / country.Population " +
+                        "    ELSE 0 END AS CityPercentage, " +
+                        "CASE WHEN country.Population > 0 THEN " +
+                        "    100.0 * (country.Population " +
+                        "    - COALESCE(SUM(city.Population), 0)) " +
+                        "    / country.Population " +
+                        "    ELSE 0 END AS NonCityPercentage " +
+                        "FROM country " +
+                        "LEFT JOIN city ON city.CountryCode = country.Code " +
+                        "GROUP BY country.Code, country.Name, country.Population " +
+                        "ORDER BY country.Name";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rset = stmt.executeQuery())
+        {
+            while (rset.next())
+            {
+                Population population = new Population(
+                        rset.getString("CountryName"),
+                        rset.getLong("TotalPopulation"),
+                        rset.getLong("CityPopulation"),
+                        rset.getDouble("CityPercentage"),
+                        rset.getLong("NonCityPopulation"),
+                        rset.getDouble("NonCityPercentage")
+                );
+
+                populations.add(population);
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        return populations;
     }
 
     // 26. Population of the world.
