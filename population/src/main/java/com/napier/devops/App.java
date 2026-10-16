@@ -20,6 +20,7 @@ public class App {
     private Connection con;
 
     public App() {
+
     }
 
     public App(Connection con) {
@@ -93,6 +94,12 @@ public class App {
                 ArrayList<Population> populations = app.populationByCountry();
                 app.printPopulationReport(populations);
 
+
+                //Report // 33:  top N populated cities in a continent
+                System.out.println("\n\nReport 33: Top populated cities in a continent ");
+                ArrayList<City> topPopulatedCities = app.topPopulatedCities("Asia", 5);
+                app.printtopPopulatedCities(topPopulatedCities);
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             } finally {
@@ -165,6 +172,18 @@ public class App {
                     population.getPopulationNotInCities(),
                     population.getPercentageNotInCities()
             ));
+        }
+    }
+
+    public void printtopPopulatedCities(ArrayList<City> cities) {
+
+        System.out.printf("%-30s %-15s%n",
+                "City", "Population");
+
+        for (City city : cities) {
+            System.out.printf("%-30s %,15d%n",
+                    city.getName(),
+                    city.getPopulation());
         }
     }
 
