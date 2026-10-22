@@ -723,8 +723,38 @@ public class App
     // 15. Top N cities in a country.
     public ArrayList<City> topCitiesInCountry(String country, int n)
     {
-        // SQL: cities in country, order by population desc limit n.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "WHERE country.Name = ? "
+                            + "ORDER BY city.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, country);
+            stmt.setInt(2, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 16. Top N cities in a district.
