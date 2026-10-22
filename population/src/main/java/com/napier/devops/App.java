@@ -92,6 +92,11 @@ public class App
                 System.out.println("\n \n Report 11: cities in a district");
                 ArrayList<City> districtCities = app.citiesInDistrict("England");
                 app.printCityReport(districtCities);
+              
+                //Report 12: Top N cities in the world.
+                System.out.println("\n \nReport 12: top N cities in the world");
+                ArrayList<City> topCities = app.topCitiesInWorld(10);
+                app.printCityReport(topCities);
 
                 // Report 14: top N cities in a region. Change the region and N to test.
                 System.out.println("\n \n Report 14: top N cities in a region");
@@ -142,7 +147,7 @@ public class App
                 System.out.println("\n \n Report 24: population by region");
                 ArrayList<Population> regionPopulations = app.populationByRegion();
                 app.printPopulationReport(regionPopulations);
-
+      
                 // Report 25: Population by country.
                 System.out.println("\n\nReport 25: Population by country");
                 ArrayList<Population> populations = app.populationByCountry();
@@ -627,8 +632,48 @@ public class App
     // 12. Top N cities in the world.
     public ArrayList<City> topCitiesInWorld(int n)
     {
-        // SQL: cities order by population desc limit n.
-        return null;
+        if (n <= 0)
+        {
+            System.out.println("N must be a positive whole number");
+            return null;
+        }
+
+        ArrayList<City> cities = new ArrayList<>();
+
+        String sql =
+                "SELECT city.ID, city.Name, city.CountryCode, " +
+                        "country.Name AS CountryName, city.District, city.Population " +
+                        "FROM city " +
+                        "JOIN country ON city.CountryCode = country.Code " +
+                        "ORDER BY city.Population DESC, city.Name ASC " +
+                        "LIMIT ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setInt(1, n);
+
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                while (rset.next())
+                {
+                    cities.add(new City(
+                            rset.getLong("ID"),
+                            rset.getString("Name"),
+                            rset.getString("CountryCode"),
+                            rset.getString("CountryName"),
+                            rset.getString("District"),
+                            rset.getLong("Population")
+                    ));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        return cities;
     }
 
     // 13. Top N cities in a continent.
