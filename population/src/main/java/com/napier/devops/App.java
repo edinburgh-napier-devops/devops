@@ -103,6 +103,11 @@ public class App
                 ArrayList<City> topRegionCities = app.topCitiesInRegion("British Islands", 10);
                 app.printCityReport(topRegionCities);
 
+                // Report 15: top N cities in a country. Change the country and N to test.
+                System.out.println("\n \n Report 15: top N cities in a country");
+                ArrayList<City> topCountryCities = app.topCitiesInCountry("United Kingdom", 10);
+                app.printCityReport(topCountryCities);
+
                 // Report 16: top N cities in a district. Change the district and N to test.
                 System.out.println("\n \n Report 16: top N cities in a district");
                 ArrayList<City> topDistrictCities = app.topCitiesInDistrict("England", 10);
