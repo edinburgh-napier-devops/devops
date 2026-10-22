@@ -72,7 +72,7 @@ public class App
                 ArrayList<Country> topCountriesInRegion =
                         app.topCountriesInRegion("Southern and Central Asia", 10);
                 app.printCountryReport(topCountriesInRegion);
-              
+
                 // Report 8: cities in a continent. Change "Europe" to the continent to test.
                 System.out.println("\n \n Report 8: cities in a continent");
                 ArrayList<City> continentCities = app.citiesInContinent("Europe");
@@ -92,17 +92,67 @@ public class App
                 System.out.println("\n \n Report 11: cities in a district");
                 ArrayList<City> districtCities = app.citiesInDistrict("England");
                 app.printCityReport(districtCities);
-
+              
                 //Report 12: Top N cities in the world.
                 System.out.println("\n \nReport 12: top N cities in the world");
                 ArrayList<City> topCities = app.topCitiesInWorld(10);
                 app.printCityReport(topCities);
-              
+
+                // Report 14: top N cities in a region. Change the region and N to test.
+                System.out.println("\n \n Report 14: top N cities in a region");
+                ArrayList<City> topRegionCities = app.topCitiesInRegion("British Islands", 10);
+                app.printCityReport(topRegionCities);
+
+                // Report 16: top N cities in a district. Change the district and N to test.
+                System.out.println("\n \n Report 16: top N cities in a district");
+                ArrayList<City> topDistrictCities = app.topCitiesInDistrict("England", 10);
+                app.printCityReport(topDistrictCities);
+
+                // Report 17: all capital cities in the world.
+                System.out.println("\n \n Report 17: all capital cities in the world");
+                ArrayList<City> capitals = app.allCapitalsInWorld();
+                app.printCapitalReport(capitals);
+
+                // Report 18: capital cities in a continent. Change the continent to test.
+                System.out.println("\n \n Report 18: capital cities in a continent");
+                ArrayList<City> continentCapitals = app.capitalsInContinent("Europe");
+                app.printCapitalReport(continentCapitals);
+
+                // Report 19: capital cities in a region. Change the region to test.
+                System.out.println("\n \n Report 19: capital cities in a region");
+                ArrayList<City> regionCapitals = app.capitalsInRegion("British Islands");
+                app.printCapitalReport(regionCapitals);
+
+                // Report 20: top N capital cities in the world. Change 10 to the N to test.
+                System.out.println("\n \n Report 20: top N capital cities in the world");
+                ArrayList<City> topCapitals = app.topCapitalsInWorld(10);
+                app.printCapitalReport(topCapitals);
+
+                // Report 21: top N capital cities in a continent. Change the continent and N to test.
+                System.out.println("\n \n Report 21: top N capital cities in a continent");
+                ArrayList<City> topContinentCapitals = app.topCapitalsInContinent("Asia", 10);
+                app.printCapitalReport(topContinentCapitals);
+
+                // Report 22: top N capital cities in a region. Change the region and N to test.
+                System.out.println("\n \n Report 22: top N capital cities in a region");
+                ArrayList<City> topRegionCapitals = app.topCapitalsInRegion("British Islands", 10);
+                app.printCapitalReport(topRegionCapitals);
+
+                // Report 23: population in cities and not in cities, for each continent.
+                System.out.println("\n \n Report 23: population by continent");
+                ArrayList<Population> continentPopulations = app.populationByContinent();
+                app.printPopulationReport(continentPopulations);
+
+                // Report 24: population in cities and not in cities, for each region.
+                System.out.println("\n \n Report 24: population by region");
+                ArrayList<Population> regionPopulations = app.populationByRegion();
+                app.printPopulationReport(regionPopulations);
+      
                 // Report 25: Population by country.
                 System.out.println("\n\nReport 25: Population by country");
                 ArrayList<Population> populations = app.populationByCountry();
                 app.printPopulationReport(populations);
-              
+
             }
             catch (Exception e)
             {
@@ -154,7 +204,20 @@ public class App
     }
 
     public void printCapitalReport(ArrayList<City> capitals) {
-        // Name, country, population.
+        if (capitals == null)
+        {
+            System.out.println("No capital city report produced");
+            return;
+        }
+        System.out.println(String.format("%-40s %-40s %s",
+                "Name", "Country", "Population"));
+        for (City city : capitals)
+        {
+            System.out.println(String.format("%-40s %-40s %d",
+                    city.getName(),
+                    city.getCountryName(),
+                    city.getPopulation()));
+        }
     }
 
     public void printPopulationReport(ArrayList<Population> populations) {
@@ -166,7 +229,7 @@ public class App
 
         System.out.println(String.format(
                 "%-35s %18s %18s %12s %18s %12s",
-                "Country",
+                "Name",
                 "Total Population",
                 "In Cities",
                 "% In Cities",
@@ -623,8 +686,38 @@ public class App
     // 14. Top N cities in a region.
     public ArrayList<City> topCitiesInRegion(String region, int n)
     {
-        // SQL: cities in region, order by population desc limit n.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "WHERE country.Region = ? "
+                            + "ORDER BY city.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, region);
+            stmt.setInt(2, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 15. Top N cities in a country.
@@ -637,64 +730,336 @@ public class App
     // 16. Top N cities in a district.
     public ArrayList<City> topCitiesInDistrict(String district, int n)
     {
-        // SQL: cities in district, order by population desc limit n.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "WHERE city.District = ? "
+                            + "ORDER BY city.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, district);
+            stmt.setInt(2, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 17. All capital cities in the world, largest population to smallest.
     public ArrayList<City> allCapitalsInWorld()
     {
-        // SQL: cities whose id equals country.capital, order by population desc.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            Statement stmt = con.createStatement();
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM country "
+                            + "JOIN city ON country.Capital = city.ID "
+                            + "ORDER BY city.Population DESC";
+            ResultSet rset = stmt.executeQuery(sql);
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 18. All capital cities in a continent, largest population to smallest.
     public ArrayList<City> capitalsInContinent(String continent)
     {
-        // SQL: capital cities where continent = continent, order by population desc.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM country "
+                            + "JOIN city ON country.Capital = city.ID "
+                            + "WHERE country.Continent = ? "
+                            + "ORDER BY city.Population DESC";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, continent);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 19. All capital cities in a region, largest population to smallest.
     public ArrayList<City> capitalsInRegion(String region)
     {
-        // SQL: capital cities where region = region, order by population desc.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM country "
+                            + "JOIN city ON country.Capital = city.ID "
+                            + "WHERE country.Region = ? "
+                            + "ORDER BY city.Population DESC";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, region);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 20. Top N capital cities in the world.
     public ArrayList<City> topCapitalsInWorld(int n)
     {
-        // SQL: capital cities order by population desc limit n.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM country "
+                            + "JOIN city ON country.Capital = city.ID "
+                            + "ORDER BY city.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 21. Top N capital cities in a continent.
     public ArrayList<City> topCapitalsInContinent(String continent, int n)
     {
-        // SQL: capital cities in continent, order by population desc limit n.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM country "
+                            + "JOIN city ON country.Capital = city.ID "
+                            + "WHERE country.Continent = ? "
+                            + "ORDER BY city.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, continent);
+            stmt.setInt(2, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 22. Top N capital cities in a region.
     public ArrayList<City> topCapitalsInRegion(String region, int n)
     {
-        // SQL: capital cities in region, order by population desc limit n.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM country "
+                            + "JOIN city ON country.Capital = city.ID "
+                            + "WHERE country.Region = ? "
+                            + "ORDER BY city.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, region);
+            stmt.setInt(2, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 23. Population in cities and not in cities, for each continent.
     public ArrayList<Population> populationByContinent()
     {
-        // SQL: continent name, country population, sum of city population, non-city population and percentages.
-        return null;
+        ArrayList<Population> populations = new ArrayList<>();
+        String sql =
+                "SELECT country.Continent AS Name, "
+                        + "SUM(country.Population) AS TotalPopulation, "
+                        + "COALESCE(SUM(cityPop.CityPopulation), 0) AS CityPopulation, "
+                        + "SUM(country.Population) - COALESCE(SUM(cityPop.CityPopulation), 0) AS NonCityPopulation, "
+                        + "CASE WHEN SUM(country.Population) > 0 THEN "
+                        + "100.0 * COALESCE(SUM(cityPop.CityPopulation), 0) / SUM(country.Population) "
+                        + "ELSE 0 END AS CityPercentage, "
+                        + "CASE WHEN SUM(country.Population) > 0 THEN "
+                        + "100.0 * (SUM(country.Population) - COALESCE(SUM(cityPop.CityPopulation), 0)) "
+                        + "/ SUM(country.Population) ELSE 0 END AS NonCityPercentage "
+                        + "FROM country "
+                        + "LEFT JOIN (SELECT CountryCode, SUM(Population) AS CityPopulation "
+                        + "FROM city GROUP BY CountryCode) cityPop "
+                        + "ON cityPop.CountryCode = country.Code "
+                        + "GROUP BY country.Continent "
+                        + "ORDER BY country.Continent";
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rset = stmt.executeQuery())
+        {
+            while (rset.next())
+            {
+                populations.add(new Population(
+                        rset.getString("Name"),
+                        rset.getLong("TotalPopulation"),
+                        rset.getLong("CityPopulation"),
+                        rset.getDouble("CityPercentage"),
+                        rset.getLong("NonCityPopulation"),
+                        rset.getDouble("NonCityPercentage")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return populations;
     }
 
     // 24. Population in cities and not in cities, for each region.
     public ArrayList<Population> populationByRegion()
     {
-        // SQL: region name, country population, sum of city population, non-city population and percentages.
-        return null;
+        ArrayList<Population> populations = new ArrayList<>();
+        String sql =
+                "SELECT country.Region AS Name, "
+                        + "SUM(country.Population) AS TotalPopulation, "
+                        + "COALESCE(SUM(cityPop.CityPopulation), 0) AS CityPopulation, "
+                        + "SUM(country.Population) - COALESCE(SUM(cityPop.CityPopulation), 0) AS NonCityPopulation, "
+                        + "CASE WHEN SUM(country.Population) > 0 THEN "
+                        + "100.0 * COALESCE(SUM(cityPop.CityPopulation), 0) / SUM(country.Population) "
+                        + "ELSE 0 END AS CityPercentage, "
+                        + "CASE WHEN SUM(country.Population) > 0 THEN "
+                        + "100.0 * (SUM(country.Population) - COALESCE(SUM(cityPop.CityPopulation), 0)) "
+                        + "/ SUM(country.Population) ELSE 0 END AS NonCityPercentage "
+                        + "FROM country "
+                        + "LEFT JOIN (SELECT CountryCode, SUM(Population) AS CityPopulation "
+                        + "FROM city GROUP BY CountryCode) cityPop "
+                        + "ON cityPop.CountryCode = country.Code "
+                        + "GROUP BY country.Region "
+                        + "ORDER BY country.Region";
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rset = stmt.executeQuery())
+        {
+            while (rset.next())
+            {
+                populations.add(new Population(
+                        rset.getString("Name"),
+                        rset.getLong("TotalPopulation"),
+                        rset.getLong("CityPopulation"),
+                        rset.getDouble("CityPercentage"),
+                        rset.getLong("NonCityPopulation"),
+                        rset.getDouble("NonCityPercentage")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return populations;
     }
 
     // 25. Population in cities and not in cities, for each country.
