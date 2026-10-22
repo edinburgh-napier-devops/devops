@@ -15,6 +15,8 @@
 
 ## Report Evidence
 
+32 requirements of 32 have been implemented, which is 100%.
+
 | ID | Name | Met | Screenshot |
 |---|---|---|---|
 | 1 | All the countries in the world organised by largest population to smallest. | Yes | [report-01-countries-world.png](reports/report-01-countries-world.png) |
