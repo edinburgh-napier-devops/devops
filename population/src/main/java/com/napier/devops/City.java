@@ -27,6 +27,12 @@ public class City
         this.population = population;
     }
 
+    public City(long id, String name, long population) {
+        this.id = id;
+        this.name = name;
+        this.population = population;
+    }
+
     public long getId()
     {
         return id;
