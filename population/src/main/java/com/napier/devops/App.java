@@ -1158,7 +1158,23 @@ public class App
     // 27. Population of a continent.
     public long continentPopulation(String continent)
     {
-        // SQL: sum of country.population where continent = continent.
+        String sql = "SELECT COALESCE(SUM(Population), 0) AS Population "
+                + "FROM country WHERE Continent = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setString(1, continent);
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                if (rset.next())
+                {
+                    return rset.getLong("Population");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
         return 0;
     }
 
