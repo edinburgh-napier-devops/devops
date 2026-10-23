@@ -45,7 +45,7 @@
 | 24 | The population of people, people living in cities, and people not living in cities in each region. | Pending verification | — |
 | 25 | The population of people, people living in cities, and people not living in cities in each country. | Pending verification | — |
 | 26 | The population of the world. | No | — |
-| 27 | The population of a continent. | No | — |
+| 27 | The population of a continent. | Yes | [report-27-population-continent.png](reports/report-27-population-continent.png) |
 | 28 | The population of a region. | No | — |
 | 29 | The population of a country. | No | — |
 | 30 | The population of a district. | No | — |
