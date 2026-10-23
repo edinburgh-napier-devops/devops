@@ -158,6 +158,12 @@ public class App
                 ArrayList<Population> populations = app.populationByCountry();
                 app.printPopulationReport(populations);
 
+                // Report 27: total population of one continent.
+                String reportContinent = "Europe";
+                System.out.println("\n\nReport 27: population of a continent");
+                System.out.println(String.format("%-20s %s", "Continent", "Population"));
+                System.out.println(String.format("%-20s %d", reportContinent,
+                        app.continentPopulation(reportContinent)));
                 // Report 26: Population by the world
                 System.out.println("\n \n Report 26: Population of the world");
                 long worldPopulation = app.worldPopulation();
@@ -1201,7 +1207,23 @@ public class App
     // 27. Population of a continent.
     public long continentPopulation(String continent)
     {
-        // SQL: sum of country.population where continent = continent.
+        String sql = "SELECT COALESCE(SUM(Population), 0) AS Population "
+                + "FROM country WHERE Continent = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setString(1, continent);
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                if (rset.next())
+                {
+                    return rset.getLong("Population");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
         return 0;
     }
 
