@@ -158,6 +158,21 @@ public class App
                 ArrayList<Population> populations = app.populationByCountry();
                 app.printPopulationReport(populations);
 
+                // Report 31: identify one city by name and location.
+                String reportCity = "London";
+                String reportCountryCode = "GBR";
+                String reportDistrict = "England";
+                System.out.println("\n\nReport 31: population of a city");
+                Long reportCityPopulation = app.cityPopulation(
+                        reportCity, reportCountryCode, reportDistrict);
+                if (reportCityPopulation != null)
+                {
+                    System.out.println(String.format("%-20s %-12s %-20s %s",
+                            "City", "Country Code", "District", "Population"));
+                    System.out.println(String.format("%-20s %-12s %-20s %d",
+                            reportCity, reportCountryCode, reportDistrict, reportCityPopulation));
+                }
+
             }
             catch (Exception e)
             {
