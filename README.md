@@ -13,6 +13,46 @@
 - [Steve Abraham](https://github.com/Stevie279)
 - [Tim Regan-Morris](https://github.com/treganmorris)
 
+## Report Evidence
+
+`Met` is confirmed only when the report has been run and its output captured. `Pending verification` means an implementation exists but its required output screenshot has not yet been committed. `No` means the report is not implemented on this branch. Screenshot links are shown only for files actually present in `reports/`.
+
+| ID | Name | Met | Screenshot |
+|---|---|---|---|
+| 1 | All the countries in the world organised by largest population to smallest. | Yes | [report-01-countries-world.png](reports/report-01-countries-world.png) |
+| 2 | All the countries in a continent organised by largest population to smallest. | Pending verification | — |
+| 3 | All the countries in a region organised by largest population to smallest. | Pending verification | — |
+| 4 | The top N populated countries in the world where N is provided by the user. | Pending verification | — |
+| 5 | The top N populated countries in a continent where N is provided by the user. | Pending verification | — |
+| 6 | The top N populated countries in a region where N is provided by the user. | Pending verification | — |
+| 7 | All the cities in the world organised by largest population to smallest. | No | — |
+| 8 | All the cities in a continent organised by largest population to smallest. | Pending verification | — |
+| 9 | All the cities in a region organised by largest population to smallest. | Pending verification | — |
+| 10 | All the cities in a country organised by largest population to smallest. | Pending verification | — |
+| 11 | All the cities in a district organised by largest population to smallest. | Pending verification | — |
+| 12 | The top N populated cities in the world where N is provided by the user. | Pending verification | — |
+| 13 | The top N populated cities in a continent where N is provided by the user. | No | — |
+| 14 | The top N populated cities in a region where N is provided by the user. | Pending verification | — |
+| 15 | The top N populated cities in a country where N is provided by the user. | Yes | [report-15-top-cities-country.png](reports/report-15-top-cities-country.png) |
+| 16 | The top N populated cities in a district where N is provided by the user. | Pending verification | — |
+| 17 | All the capital cities in the world organised by largest population to smallest. | Pending verification | — |
+| 18 | All the capital cities in a continent organised by largest population to smallest. | Pending verification | — |
+| 19 | All the capital cities in a region organised by largest population to smallest. | Pending verification | — |
+| 20 | The top N populated capital cities in the world where N is provided by the user. | Pending verification | — |
+| 21 | The top N populated capital cities in a continent where N is provided by the user. | Pending verification | — |
+| 22 | The top N populated capital cities in a region where N is provided by the user. | Pending verification | — |
+| 23 | The population of people, people living in cities, and people not living in cities in each continent. | Pending verification | — |
+| 24 | The population of people, people living in cities, and people not living in cities in each region. | Pending verification | — |
+| 25 | The population of people, people living in cities, and people not living in cities in each country. | Pending verification | — |
+| 26 | The population of the world. | No | — |
+| 27 | The population of a continent. | Yes | [report-27-population-continent.png](reports/report-27-population-continent.png) |
+| 28 | The population of a region. | No | — |
+| 29 | The population of a country. | No | — |
+| 30 | The population of a district. | No | — |
+| 31 | The population of a city. | No | — |
+| 32 | The number of people who speak Chinese, English, Hindi, Spanish and Arabic, from greatest number to smallest, including the percentage of the world population. | No | — |
+
+
 ## Development workflow
 
 The team follows the Gitflow process introduced in [Lab 02](https://github.com/Kevin-Sim/SET09803-DevOps-Global-Online/tree/master/labs/lab02):
