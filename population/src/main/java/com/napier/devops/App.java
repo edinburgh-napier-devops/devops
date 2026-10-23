@@ -178,10 +178,11 @@ public class App {
             System.out.println("No city report produced");
             return;
         }
-        System.out.printf("%-30s %-15s%n", "City", "Population");
+        System.out.printf("%-30s %15s%n",
+                "City", "Population");
 
         for (City city : cities) {
-            System.out.printf("%-30s %,15s%n",
+            System.out.printf("%-30s %,15d%n",
                     city.getName(),
                     city.getPopulation());
         }
