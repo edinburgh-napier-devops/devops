@@ -89,7 +89,7 @@ public class App {
                 app.printCityReport(districtCities);
 
                 // Report 13:top N populated cities in a continent
-                System.out.println("\n\nReport 13: Top populated cities in a continent ");
+                System.out.println("\n \nReport 13: Top populated cities in a continent ");
                 ArrayList<City> topPopulatedCities = app.topCitiesInContinent("Asia", 10);
                 app.printTopPopulatedCitiesReport(topPopulatedCities);
 
@@ -178,11 +178,10 @@ public class App {
             System.out.println("No city report produced");
             return;
         }
-        System.out.printf("%-30s %-15s%n",
-                "City", "Population");
+        System.out.printf("%-30s %-15s%n", "City", "Population");
 
         for (City city : cities) {
-            System.out.printf("%-30s %,15d%n",
+            System.out.printf("%-30s %,15s%n",
                     city.getName(),
                     city.getPopulation());
         }
