@@ -157,7 +157,34 @@ public class App
                 System.out.println("\n\nReport 25: Population by country");
                 ArrayList<Population> populations = app.populationByCountry();
                 app.printPopulationReport(populations);
+              
+                // Report 26: Population by the world
+                System.out.println("\n \n Report 26: Population of the world");
+                long worldPopulation = app.worldPopulation();
 
+                if (worldPopulation > 0)
+                {
+                    System.out.printf("World Population: %,d%n", worldPopulation);
+                }
+              
+                // Report 27: total population of one continent.
+                String reportContinent = "Europe";
+                System.out.println("\n\nReport 27: population of a continent");
+                System.out.println(String.format("%-20s %s", "Continent", "Population"));
+                System.out.println(String.format("%-20s %d", reportContinent,
+                app.continentPopulation(reportContinent)));
+              
+                // Report 28: Population of a region.
+                System.out.println("\n Report 28: Population of a region");
+
+                long population =
+                        app.regionPopulation("Western Europe");
+
+                if (population > 0)
+                {
+                    System.out.println(
+                            "Population of western Europe: " + population);
+                  
                 // Report 31: identify one city by name and location.
                 String reportCity = "London";
                 String reportCountryCode = "GBR";
@@ -171,6 +198,7 @@ public class App
                             "City", "Country Code", "District", "Population"));
                     System.out.println(String.format("%-20s %-12s %-20s %d",
                             reportCity, reportCountryCode, reportDistrict, reportCityPopulation));
+
                 }
 
             }
@@ -1166,22 +1194,93 @@ public class App
     // 26. Population of the world.
     public long worldPopulation()
     {
-        // SQL: sum of country.population.
-        return 0;
+        String sql = "SELECT SUM(Population) AS WorldPopulation FROM country";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rset = stmt.executeQuery())
+        {
+            if (rset.next())
+            {
+                long population = rset.getLong("WorldPopulation");
+
+                if (!rset.wasNull())
+                {
+                    return population;
+                }
+            }
+
+            System.out.println("No world population data is available");
+            return 0;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Unable to retrieve world population: " + e.getMessage());
+            return 0;
+        }
     }
 
     // 27. Population of a continent.
     public long continentPopulation(String continent)
     {
-        // SQL: sum of country.population where continent = continent.
+        String sql = "SELECT COALESCE(SUM(Population), 0) AS Population "
+                + "FROM country WHERE Continent = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setString(1, continent);
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                if (rset.next())
+                {
+                    return rset.getLong("Population");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
         return 0;
     }
 
     // 28. Population of a region.
     public long regionPopulation(String region)
     {
-        // SQL: sum of country.population where region = region.
-        return 0;
+        if (region == null || region.trim().isEmpty())
+        {
+            System.out.println("A region must be provided");
+            return 0;
+        }
+
+        String sql =
+                "SELECT SUM(Population) AS TotalPopulation " +
+                        "FROM country WHERE Region = ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setString(1, region);
+
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                if (rset.next())
+                {
+                    long population = rset.getLong("TotalPopulation");
+
+                    if (!rset.wasNull())
+                    {
+                        return population;
+                    }
+                }
+
+                System.out.println("Region not found: " + region);
+                return 0;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Could not retrieve region population: "
+                    + e.getMessage());
+            return 0;
+        }
     }
 
     // 29. Population of a country.
