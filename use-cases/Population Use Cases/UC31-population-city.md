@@ -37,15 +37,20 @@ The user requests the population of a city.
 ## MAIN SUCCESS SCENARIO
 
 1. User requests the population of a city.
-2. User captures the name of the city.
-3. User extracts the population of that city.
-4. User provides the population figure to the organisation.
+2. User provides the city name and, when needed, its country and district or unique city ID.
+3. The system finds exactly one matching city and extracts its population.
+4. The system provides the population figure to the organisation.
 
 ## EXTENSIONS
 
 3. **City does not exist**:
 
-    1. User informs the organisation that no such city exists.
+    1. The system informs the user that no matching city exists.
+
+3. **City name matches more than one city**:
+
+    1. The system shows the matching city IDs and locations without reporting a population.
+    2. The user specifies the country and district or a unique city ID, then retries.
 
 ## SUB-VARIATIONS
 
