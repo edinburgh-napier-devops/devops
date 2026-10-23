@@ -157,13 +157,7 @@ public class App
                 System.out.println("\n\nReport 25: Population by country");
                 ArrayList<Population> populations = app.populationByCountry();
                 app.printPopulationReport(populations);
-
-                // Report 27: total population of one continent.
-                String reportContinent = "Europe";
-                System.out.println("\n\nReport 27: population of a continent");
-                System.out.println(String.format("%-20s %s", "Continent", "Population"));
-                System.out.println(String.format("%-20s %d", reportContinent,
-                        app.continentPopulation(reportContinent)));
+              
                 // Report 26: Population by the world
                 System.out.println("\n \n Report 26: Population of the world");
                 long worldPopulation = app.worldPopulation();
@@ -172,8 +166,14 @@ public class App
                 {
                     System.out.printf("World Population: %,d%n", worldPopulation);
                 }
-
-
+              
+                // Report 27: total population of one continent.
+                String reportContinent = "Europe";
+                System.out.println("\n\nReport 27: population of a continent");
+                System.out.println(String.format("%-20s %s", "Continent", "Population"));
+                System.out.println(String.format("%-20s %d", reportContinent,
+                app.continentPopulation(reportContinent)));
+              
                 // Report 28: Population of a region.
                 System.out.println("\n Report 28: Population of a region");
 
@@ -184,6 +184,21 @@ public class App
                 {
                     System.out.println(
                             "Population of western Europe: " + population);
+                  
+                // Report 31: identify one city by name and location.
+                String reportCity = "London";
+                String reportCountryCode = "GBR";
+                String reportDistrict = "England";
+                System.out.println("\n\nReport 31: population of a city");
+                Long reportCityPopulation = app.cityPopulation(
+                        reportCity, reportCountryCode, reportDistrict);
+                if (reportCityPopulation != null)
+                {
+                    System.out.println(String.format("%-20s %-12s %-20s %s",
+                            "City", "Country Code", "District", "Population"));
+                    System.out.println(String.format("%-20s %-12s %-20s %d",
+                            reportCity, reportCountryCode, reportDistrict, reportCityPopulation));
+
                 }
 
             }
@@ -1283,10 +1298,101 @@ public class App
     }
 
     // 31. Population of a city.
-    public long cityPopulation(String city)
+    public Long cityPopulation(String city)
     {
-        // SQL: city.population where name = city.
-        return 0;
+        return cityPopulation(city, null, null);
+    }
+
+    // A name may occur in several countries or districts. Only return a
+    // population when the supplied details identify exactly one city.
+    public Long cityPopulation(String city, String countryCode, String district)
+    {
+        StringBuilder sql = new StringBuilder(
+                "SELECT ID, Name, CountryCode, District, Population FROM city WHERE Name = ?");
+        if (countryCode != null)
+        {
+            sql.append(" AND CountryCode = ?");
+        }
+        if (district != null)
+        {
+            sql.append(" AND District = ?");
+        }
+
+        ArrayList<City> matches = new ArrayList<>();
+        try (PreparedStatement stmt = con.prepareStatement(sql.toString()))
+        {
+            int parameter = 1;
+            stmt.setString(parameter++, city);
+            if (countryCode != null)
+            {
+                stmt.setString(parameter++, countryCode);
+            }
+            if (district != null)
+            {
+                stmt.setString(parameter, district);
+            }
+
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                while (rset.next())
+                {
+                    matches.add(new City(
+                            rset.getLong("ID"),
+                            rset.getString("Name"),
+                            rset.getString("CountryCode"),
+                            rset.getString("District"),
+                            rset.getLong("Population")));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        if (matches.isEmpty())
+        {
+            System.out.println("No city found for: " + city);
+            return null;
+        }
+        if (matches.size() > 1)
+        {
+            System.out.println("Ambiguous city name: " + city
+                    + ". Specify country and district, or choose a city ID:");
+            for (City match : matches)
+            {
+                System.out.println(String.format("%d: %s, %s, %s",
+                        match.getId(), match.getName(), match.getCountryCode(),
+                        match.getDistrict()));
+            }
+            return null;
+        }
+        return matches.get(0).getPopulation();
+    }
+
+    // The city table's primary key resolves any remaining name ambiguity.
+    public Long cityPopulation(long cityId)
+    {
+        String sql = "SELECT Population FROM city WHERE ID = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setLong(1, cityId);
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                if (rset.next())
+                {
+                    return rset.getLong("Population");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        System.out.println("No city found for ID: " + cityId);
+        return null;
     }
 
     // 32. Speakers of Chinese, English, Hindi, Spanish and Arabic, with world percentage.
