@@ -158,6 +158,16 @@ public class App
                 ArrayList<Population> populations = app.populationByCountry();
                 app.printPopulationReport(populations);
 
+                // Report 26: Population by the world
+                System.out.println("\n \n Report 26: Population of the world");
+                long worldPopulation = app.worldPopulation();
+
+                if (worldPopulation > 0)
+                {
+                    System.out.printf("World Population: %,d%n", worldPopulation);
+                }
+
+
             }
             catch (Exception e)
             {
@@ -1151,8 +1161,29 @@ public class App
     // 26. Population of the world.
     public long worldPopulation()
     {
-        // SQL: sum of country.population.
-        return 0;
+        String sql = "SELECT SUM(Population) AS WorldPopulation FROM country";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rset = stmt.executeQuery())
+        {
+            if (rset.next())
+            {
+                long population = rset.getLong("WorldPopulation");
+
+                if (!rset.wasNull())
+                {
+                    return population;
+                }
+            }
+
+            System.out.println("No world population data is available");
+            return 0;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Unable to retrieve world population: " + e.getMessage());
+            return 0;
+        }
     }
 
     // 27. Population of a continent.
