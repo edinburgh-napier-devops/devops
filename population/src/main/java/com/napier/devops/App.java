@@ -158,6 +158,13 @@ public class App
                 ArrayList<Population> populations = app.populationByCountry();
                 app.printPopulationReport(populations);
 
+                // Report 27: total population of one continent.
+                String reportContinent = "Europe";
+                System.out.println("\n\nReport 27: population of a continent");
+                System.out.println(String.format("%-20s %s", "Continent", "Population"));
+                System.out.println(String.format("%-20s %d", reportContinent,
+                        app.continentPopulation(reportContinent)));
+
             }
             catch (Exception e)
             {
