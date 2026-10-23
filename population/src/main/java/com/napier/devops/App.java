@@ -1184,10 +1184,101 @@ public class App
     }
 
     // 31. Population of a city.
-    public long cityPopulation(String city)
+    public Long cityPopulation(String city)
     {
-        // SQL: city.population where name = city.
-        return 0;
+        return cityPopulation(city, null, null);
+    }
+
+    // A name may occur in several countries or districts. Only return a
+    // population when the supplied details identify exactly one city.
+    public Long cityPopulation(String city, String countryCode, String district)
+    {
+        StringBuilder sql = new StringBuilder(
+                "SELECT ID, Name, CountryCode, District, Population FROM city WHERE Name = ?");
+        if (countryCode != null)
+        {
+            sql.append(" AND CountryCode = ?");
+        }
+        if (district != null)
+        {
+            sql.append(" AND District = ?");
+        }
+
+        ArrayList<City> matches = new ArrayList<>();
+        try (PreparedStatement stmt = con.prepareStatement(sql.toString()))
+        {
+            int parameter = 1;
+            stmt.setString(parameter++, city);
+            if (countryCode != null)
+            {
+                stmt.setString(parameter++, countryCode);
+            }
+            if (district != null)
+            {
+                stmt.setString(parameter, district);
+            }
+
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                while (rset.next())
+                {
+                    matches.add(new City(
+                            rset.getLong("ID"),
+                            rset.getString("Name"),
+                            rset.getString("CountryCode"),
+                            rset.getString("District"),
+                            rset.getLong("Population")));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        if (matches.isEmpty())
+        {
+            System.out.println("No city found for: " + city);
+            return null;
+        }
+        if (matches.size() > 1)
+        {
+            System.out.println("Ambiguous city name: " + city
+                    + ". Specify country and district, or choose a city ID:");
+            for (City match : matches)
+            {
+                System.out.println(String.format("%d: %s, %s, %s",
+                        match.getId(), match.getName(), match.getCountryCode(),
+                        match.getDistrict()));
+            }
+            return null;
+        }
+        return matches.get(0).getPopulation();
+    }
+
+    // The city table's primary key resolves any remaining name ambiguity.
+    public Long cityPopulation(long cityId)
+    {
+        String sql = "SELECT Population FROM city WHERE ID = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setLong(1, cityId);
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                if (rset.next())
+                {
+                    return rset.getLong("Population");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        System.out.println("No city found for ID: " + cityId);
+        return null;
     }
 
     // 32. Speakers of Chinese, English, Hindi, Spanish and Arabic, with world percentage.
