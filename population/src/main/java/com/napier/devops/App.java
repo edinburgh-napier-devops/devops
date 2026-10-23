@@ -184,7 +184,8 @@ public class App
                 {
                     System.out.println(
                             "Population of western Europe: " + population);
-                  
+                }
+
                 // Report 31: identify one city by name and location.
                 String reportCity = "London";
                 String reportCountryCode = "GBR";
@@ -200,6 +201,11 @@ public class App
                             reportCity, reportCountryCode, reportDistrict, reportCityPopulation));
 
                 }
+
+                // Report 32: speakers of Chinese, English, Hindi, Spanish and Arabic.
+                System.out.println("\n\nReport 32: language speakers");
+                ArrayList<Language> languages = app.languageSpeakers();
+                app.printLanguageReport(languages);
 
             }
             catch (Exception e)
@@ -296,6 +302,23 @@ public class App
                     population.getPopulationNotInCities(),
                     population.getPercentageNotInCities()
             ));
+        }
+    }
+
+    public void printLanguageReport(ArrayList<Language> languages) {
+        if (languages == null)
+        {
+            System.out.println("No language report produced");
+            return;
+        }
+        System.out.println(String.format("%-15s %18s %18s",
+                "Language", "Speakers", "% of World"));
+        for (Language language : languages)
+        {
+            System.out.println(String.format("%-15s %18d %17.2f%%",
+                    language.getLanguage(),
+                    language.getSpeakers(),
+                    language.getWorldPercentage()));
         }
     }
 
@@ -1398,7 +1421,33 @@ public class App
     // 32. Speakers of Chinese, English, Hindi, Spanish and Arabic, with world percentage.
     public ArrayList<Language> languageSpeakers()
     {
-        // SQL: language, speakers, speakers / world population, for those five languages, order by speakers desc.
-        return null;
+        ArrayList<Language> languages = new ArrayList<>();
+        String sql =
+                "SELECT countrylanguage.Language, "
+                        + "ROUND(SUM(country.Population * countrylanguage.Percentage / 100)) AS Speakers, "
+                        + "SUM(country.Population * countrylanguage.Percentage / 100) "
+                        + "/ (SELECT SUM(Population) FROM country) * 100 AS WorldPercentage "
+                        + "FROM countrylanguage "
+                        + "JOIN country ON countrylanguage.CountryCode = country.Code "
+                        + "WHERE countrylanguage.Language IN ('Chinese', 'English', 'Hindi', 'Spanish', 'Arabic') "
+                        + "GROUP BY countrylanguage.Language "
+                        + "ORDER BY Speakers DESC";
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rset = stmt.executeQuery())
+        {
+            while (rset.next())
+            {
+                languages.add(new Language(
+                        rset.getString("Language"),
+                        rset.getLong("Speakers"),
+                        rset.getDouble("WorldPercentage")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return languages;
     }
 }
