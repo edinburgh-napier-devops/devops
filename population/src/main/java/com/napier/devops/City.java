@@ -28,9 +28,9 @@ public class City
     }
 
     public City(long id, String name, long population) {
-    this.id = id;
-    this.name = name;
-    this.population = population;
+        this.id = id;
+        this.name = name;
+        this.population = population;
     }
 
     public long getId()
