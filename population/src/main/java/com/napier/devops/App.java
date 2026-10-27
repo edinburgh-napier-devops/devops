@@ -191,6 +191,18 @@ public class App
                             "Population of western Europe: " + population);
                 }
 
+                // Report 29: Population of a country.
+                String reportCountry = "United Kingdom";
+                System.out.println("\n Report 29: Population of a country");
+
+                long countryPop = app.countryPopulation(reportCountry);
+
+                if (countryPop > 0)
+                {
+                    System.out.printf("Population of %s: %,d%n",
+                            reportCountry, countryPop);
+                }
+
                 // Report 31: identify one city by name and location.
                 String reportCity = "London";
                 String reportCountryCode = "GBR";
