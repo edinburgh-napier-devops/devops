@@ -73,6 +73,11 @@ public class App
                         app.topCountriesInRegion("Southern and Central Asia", 10);
                 app.printCountryReport(topCountriesInRegion);
 
+                // Report 7: all cities in the world organised by largest population to smallest.
+                System.out.println("\n \n Report 7: all cities in the world");
+                ArrayList<City> allCities = app.allCitiesInWorld();
+                app.printCityReport(allCities);
+
                 // Report 8: cities in a continent. Change "Europe" to the continent to test.
                 System.out.println("\n \n Report 8: cities in a continent");
                 ArrayList<City> continentCities = app.citiesInContinent("Europe");
