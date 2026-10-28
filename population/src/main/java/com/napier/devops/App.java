@@ -103,6 +103,11 @@ public class App
                 ArrayList<City> topCities = app.topCitiesInWorld(10);
                 app.printCityReport(topCities);
 
+                // Report 13: top N cities in a continent. Change the continent and N to test.
+                System.out.println("\n \n Report 13: top N cities in a continent");
+                ArrayList<City> topContinentCities = app.topCitiesInContinent("Asia", 10);
+                app.printCityReport(topContinentCities);
+
                 // Report 14: top N cities in a region. Change the region and N to test.
                 System.out.println("\n \n Report 14: top N cities in a region");
                 ArrayList<City> topRegionCities = app.topCitiesInRegion("British Islands", 10);
@@ -162,6 +167,55 @@ public class App
                 System.out.println("\n\nReport 25: Population by country");
                 ArrayList<Population> populations = app.populationByCountry();
                 app.printPopulationReport(populations);
+              
+                // Report 26: Population by the world
+                System.out.println("\n \n Report 26: Population of the world");
+                long worldPopulation = app.worldPopulation();
+
+                if (worldPopulation > 0)
+                {
+                    System.out.printf("World Population: %,d%n", worldPopulation);
+                }
+              
+                // Report 27: total population of one continent.
+                String reportContinent = "Europe";
+                System.out.println("\n\nReport 27: population of a continent");
+                System.out.println(String.format("%-20s %s", "Continent", "Population"));
+                System.out.println(String.format("%-20s %d", reportContinent,
+                app.continentPopulation(reportContinent)));
+              
+                // Report 28: Population of a region.
+                System.out.println("\n Report 28: Population of a region");
+
+                long population =
+                        app.regionPopulation("Western Europe");
+
+                if (population > 0)
+                {
+                    System.out.println(
+                            "Population of western Europe: " + population);
+                }
+
+                // Report 31: identify one city by name and location.
+                String reportCity = "London";
+                String reportCountryCode = "GBR";
+                String reportDistrict = "England";
+                System.out.println("\n\nReport 31: population of a city");
+                Long reportCityPopulation = app.cityPopulation(
+                        reportCity, reportCountryCode, reportDistrict);
+                if (reportCityPopulation != null)
+                {
+                    System.out.println(String.format("%-20s %-12s %-20s %s",
+                            "City", "Country Code", "District", "Population"));
+                    System.out.println(String.format("%-20s %-12s %-20s %d",
+                            reportCity, reportCountryCode, reportDistrict, reportCityPopulation));
+
+                }
+
+                // Report 32: speakers of Chinese, English, Hindi, Spanish and Arabic.
+                System.out.println("\n\nReport 32: language speakers");
+                ArrayList<Language> languages = app.languageSpeakers();
+                app.printLanguageReport(languages);
 
             }
             catch (Exception e)
@@ -258,6 +312,23 @@ public class App
                     population.getPopulationNotInCities(),
                     population.getPercentageNotInCities()
             ));
+        }
+    }
+
+    public void printLanguageReport(ArrayList<Language> languages) {
+        if (languages == null)
+        {
+            System.out.println("No language report produced");
+            return;
+        }
+        System.out.println(String.format("%-15s %18s %18s",
+                "Language", "Speakers", "% of World"));
+        for (Language language : languages)
+        {
+            System.out.println(String.format("%-15s %18d %17.2f%%",
+                    language.getLanguage(),
+                    language.getSpeakers(),
+                    language.getWorldPercentage()));
         }
     }
 
@@ -689,8 +760,38 @@ public class App
     // 13. Top N cities in a continent.
     public ArrayList<City> topCitiesInContinent(String continent, int n)
     {
-        // SQL: cities in continent, order by population desc limit n.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "WHERE country.Continent = ? "
+                            + "ORDER BY city.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, continent);
+            stmt.setInt(2, n);
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 14. Top N cities in a region.
@@ -1156,22 +1257,93 @@ public class App
     // 26. Population of the world.
     public long worldPopulation()
     {
-        // SQL: sum of country.population.
-        return 0;
+        String sql = "SELECT SUM(Population) AS WorldPopulation FROM country";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rset = stmt.executeQuery())
+        {
+            if (rset.next())
+            {
+                long population = rset.getLong("WorldPopulation");
+
+                if (!rset.wasNull())
+                {
+                    return population;
+                }
+            }
+
+            System.out.println("No world population data is available");
+            return 0;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Unable to retrieve world population: " + e.getMessage());
+            return 0;
+        }
     }
 
     // 27. Population of a continent.
     public long continentPopulation(String continent)
     {
-        // SQL: sum of country.population where continent = continent.
+        String sql = "SELECT COALESCE(SUM(Population), 0) AS Population "
+                + "FROM country WHERE Continent = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setString(1, continent);
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                if (rset.next())
+                {
+                    return rset.getLong("Population");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
         return 0;
     }
 
     // 28. Population of a region.
     public long regionPopulation(String region)
     {
-        // SQL: sum of country.population where region = region.
-        return 0;
+        if (region == null || region.trim().isEmpty())
+        {
+            System.out.println("A region must be provided");
+            return 0;
+        }
+
+        String sql =
+                "SELECT SUM(Population) AS TotalPopulation " +
+                        "FROM country WHERE Region = ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setString(1, region);
+
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                if (rset.next())
+                {
+                    long population = rset.getLong("TotalPopulation");
+
+                    if (!rset.wasNull())
+                    {
+                        return population;
+                    }
+                }
+
+                System.out.println("Region not found: " + region);
+                return 0;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Could not retrieve region population: "
+                    + e.getMessage());
+            return 0;
+        }
     }
 
     // 29. Population of a country.
@@ -1189,16 +1361,133 @@ public class App
     }
 
     // 31. Population of a city.
-    public long cityPopulation(String city)
+    public Long cityPopulation(String city)
     {
-        // SQL: city.population where name = city.
-        return 0;
+        return cityPopulation(city, null, null);
+    }
+
+    // A name may occur in several countries or districts. Only return a
+    // population when the supplied details identify exactly one city.
+    public Long cityPopulation(String city, String countryCode, String district)
+    {
+        StringBuilder sql = new StringBuilder(
+                "SELECT ID, Name, CountryCode, District, Population FROM city WHERE Name = ?");
+        if (countryCode != null)
+        {
+            sql.append(" AND CountryCode = ?");
+        }
+        if (district != null)
+        {
+            sql.append(" AND District = ?");
+        }
+
+        ArrayList<City> matches = new ArrayList<>();
+        try (PreparedStatement stmt = con.prepareStatement(sql.toString()))
+        {
+            int parameter = 1;
+            stmt.setString(parameter++, city);
+            if (countryCode != null)
+            {
+                stmt.setString(parameter++, countryCode);
+            }
+            if (district != null)
+            {
+                stmt.setString(parameter, district);
+            }
+
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                while (rset.next())
+                {
+                    matches.add(new City(
+                            rset.getLong("ID"),
+                            rset.getString("Name"),
+                            rset.getString("CountryCode"),
+                            rset.getString("District"),
+                            rset.getLong("Population")));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        if (matches.isEmpty())
+        {
+            System.out.println("No city found for: " + city);
+            return null;
+        }
+        if (matches.size() > 1)
+        {
+            System.out.println("Ambiguous city name: " + city
+                    + ". Specify country and district, or choose a city ID:");
+            for (City match : matches)
+            {
+                System.out.println(String.format("%d: %s, %s, %s",
+                        match.getId(), match.getName(), match.getCountryCode(),
+                        match.getDistrict()));
+            }
+            return null;
+        }
+        return matches.get(0).getPopulation();
+    }
+
+    // The city table's primary key resolves any remaining name ambiguity.
+    public Long cityPopulation(long cityId)
+    {
+        String sql = "SELECT Population FROM city WHERE ID = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setLong(1, cityId);
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                if (rset.next())
+                {
+                    return rset.getLong("Population");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        System.out.println("No city found for ID: " + cityId);
+        return null;
     }
 
     // 32. Speakers of Chinese, English, Hindi, Spanish and Arabic, with world percentage.
     public ArrayList<Language> languageSpeakers()
     {
-        // SQL: language, speakers, speakers / world population, for those five languages, order by speakers desc.
-        return null;
+        ArrayList<Language> languages = new ArrayList<>();
+        String sql =
+                "SELECT countrylanguage.Language, "
+                        + "ROUND(SUM(country.Population * countrylanguage.Percentage / 100)) AS Speakers, "
+                        + "SUM(country.Population * countrylanguage.Percentage / 100) "
+                        + "/ (SELECT SUM(Population) FROM country) * 100 AS WorldPercentage "
+                        + "FROM countrylanguage "
+                        + "JOIN country ON countrylanguage.CountryCode = country.Code "
+                        + "WHERE countrylanguage.Language IN ('Chinese', 'English', 'Hindi', 'Spanish', 'Arabic') "
+                        + "GROUP BY countrylanguage.Language "
+                        + "ORDER BY Speakers DESC";
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rset = stmt.executeQuery())
+        {
+            while (rset.next())
+            {
+                languages.add(new Language(
+                        rset.getString("Language"),
+                        rset.getLong("Speakers"),
+                        rset.getDouble("WorldPercentage")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return languages;
     }
 }
