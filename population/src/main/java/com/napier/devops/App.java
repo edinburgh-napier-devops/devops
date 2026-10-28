@@ -74,7 +74,7 @@ public class App
                 app.printCountryReport(topCountriesInRegion);
 
                 // Report 7: all cities in the world organised by largest population to smallest.
-                System.out.println("\n \n Report 7: all cities in the world");
+                System.out.println("\n \n Report 7: All the cities in the world organised by largest population to smallest.");
                 ArrayList<City> allCities = app.allCitiesInWorld();
                 app.printCityReport(allCities);
 
