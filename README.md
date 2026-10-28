@@ -16,7 +16,7 @@
 ## Report Evidence
 `Met` is confirmed only when the report has been run and its output captured. `Pending verification` means an implementation exists but its required output screenshot has not yet been committed. `No` means the report is not implemented on this branch. Screenshot links are shown only for files actually present in `reports/`.
 
-**29 requirements of 32 have been implemented, which is 91%.**
+**30 requirements of 32 have been implemented, which is 93.75%.**
 
 | ID | Name | Met | Screenshot |
 |---|---|---|---|
