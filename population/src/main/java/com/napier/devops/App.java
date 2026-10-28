@@ -190,9 +190,9 @@ public class App {
                 String district = "England";
                 long districtPopulation = app.districtPopulation(district);
                 if (districtPopulation > 0) {
-                    System.out.printf("Total population of  %s: %,d%n ", district,":", districtPopulation);
+                    System.out.printf("Total population of %s: %,d%n", district, districtPopulation);
                 } else {
-                    System.out.printf("No population data fond for district ", district);
+                    System.out.printf("No population data found for district %s%n", district);
                 }
 
 
