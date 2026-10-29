@@ -32,11 +32,11 @@ jobs:
           DB_HOST: localhost
           DB_PORT: "33061"
 
-      - name: Upload jar artifact
+      - name: Upload jar
         uses: actions/upload-artifact@v4
         with:
-        name: population-jar
-        path: population/target/*-jar-with-dependencies.jar
+            name: population-jar
+            path: "population/target/*-jar-with-dependencies.jar"
 
       - name: Stop database
         if: always()
