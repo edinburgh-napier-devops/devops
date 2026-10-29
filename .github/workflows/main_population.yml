@@ -17,8 +17,11 @@ jobs:
           java-version: '26'
           distribution: 'adopt'
 
-      - name: Build population module
-        run: mvn -pl population -am package
+      - name: Unit Tests
+        run: mvn -pl population -Dtest=com.napier.devops.PrintReportTest,com.napier.devops.ValidationTest test
+
+      - name: Package
+        run: mvn -pl population -am package -DskipTests
 
       - name: Start world database
         run: docker compose up --build -d world
