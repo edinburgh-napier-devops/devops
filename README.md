@@ -1,7 +1,8 @@
 # SET09803 2026-7 TR1 001 - DevOps
 * Master Build Status ![Develop Build Status](https://img.shields.io/github/actions/workflow/status/edinburgh-napier-devops/devops/main.yml?branch=master&style=flat-square)
-* Master Test Coverage ![Coverage](https://img.shields.io/badge/coverage-23%25-yellow)
-* Develop Branch Status ![Develop Build Status](https://img.shields.io/github/actions/workflow/status/edinburgh-napier-devops/devops/main.yml?branch=develop&style=flat-square)
+* Master Test Coverage [![codecov](https://codecov.io/gh/edinburgh-napier-devops/devops/branch/master/graph/badge.svg)](https://codecov.io/gh/edinburgh-napier-devops/devops)
+* Develop Build Status ![Develop Build Status](https://img.shields.io/github/actions/workflow/status/edinburgh-napier-devops/devops/main.yml?branch=develop&style=flat-square)
+* Develop Test Coverage [![codecov](https://codecov.io/gh/edinburgh-napier-devops/devops/branch/develop/graph/badge.svg)](https://codecov.io/gh/edinburgh-napier-devops/devops)
 * License [![LICENSE](https://img.shields.io/github/license/edinburgh-napier-devops/devops.svg?style=flat-square)](https://github.com/edinburgh-napier-devops/devops/blob/master/LICENSE)
 * Release [![Releases](https://img.shields.io/github/release/edinburgh-napier-devops/devops/all.svg?style=flat-square)](https://github.com/edinburgh-napier-devops/devops/releases)
 
