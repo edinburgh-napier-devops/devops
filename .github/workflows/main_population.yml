@@ -2,6 +2,52 @@ name: Test Population Report
 on: push
 
 jobs:
+  UnitTests:
+    name: Unit Tests
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Set up JDK 26
+        uses: actions/setup-java@v5
+        with:
+          java-version: '26'
+          distribution: 'adopt'
+      - name: Unit Tests
+        run: mvn -pl population -Dtest=com.napier.devops.PrintReportTest,com.napier.devops.ValidationTest test
+
+  IntegrationTests:
+    name: Integration Tests
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Set up JDK 26
+        uses: actions/setup-java@v5
+        with:
+          java-version: '26'
+          distribution: 'adopt'
+      - name: Start world database
+        run: docker compose up --build -d world
+      - name: Integration Tests
+        run: mvn -pl population -Dtest=com.napier.devops.AppIntegrationTest test
+        env:
+          DB_HOST: localhost
+          DB_PORT: "33061"
+      - name: CodeCov
+        uses: codecov/codecov-action@v4
+        with:
+          directory: population/target/site/jacoco
+          flags: integration
+          verbose: true
+      - name: Stop database
+        if: always()
+        run: docker compose down
+
   build:
     name: Build and run population module
     runs-on: ubuntu-22.04
@@ -10,28 +56,25 @@ jobs:
         uses: actions/checkout@v5
         with:
           submodules: recursive
-
       - name: Set up JDK 26
         uses: actions/setup-java@v5
         with:
           java-version: '26'
           distribution: 'adopt'
-
-      - name: Unit Tests
-        run: mvn -pl population -Dtest=com.napier.devops.PrintReportTest,com.napier.devops.ValidationTest test
-
-      - name: Package
+      - name: Build population module
         run: mvn -pl population -am package -DskipTests
-
       - name: Start world database
         run: docker compose up --build -d world
-
       - name: Run population reports
         run: java -jar population/target/*-jar-with-dependencies.jar
         env:
           DB_HOST: localhost
           DB_PORT: "33061"
-
+      - name: Upload jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: population-jar
+          path: "population/target/*-jar-with-dependencies.jar"
       - name: Stop database
         if: always()
         run: docker compose down
