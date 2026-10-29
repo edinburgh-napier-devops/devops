@@ -73,6 +73,11 @@ public class App
                         app.topCountriesInRegion("Southern and Central Asia", 10);
                 app.printCountryReport(topCountriesInRegion);
 
+                // Report 7: all cities in the world organised by largest population to smallest.
+                System.out.println("\n \n Report 7: All the cities in the world organised by largest population to smallest.");
+                ArrayList<City> allCities = app.allCitiesInWorld();
+                app.printCityReport(allCities);
+
                 // Report 8: cities in a continent. Change "Europe" to the continent to test.
                 System.out.println("\n \n Report 8: cities in a continent");
                 ArrayList<City> continentCities = app.citiesInContinent("Europe");
@@ -573,8 +578,34 @@ public class App
     // 7. All cities in the world, largest population to smallest.
     public ArrayList<City> allCitiesInWorld()
     {
-        // SQL: select city name, country name, district, population order by population desc.
-        return null;
+        ArrayList<City> cities = new ArrayList<>();
+        try
+        {
+            Statement stmt = con.createStatement();
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "ORDER BY city.Population DESC";
+            ResultSet rset = stmt.executeQuery(sql);
+            while (rset.next())
+            {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return cities;
     }
 
     // 8. All cities in a continent, largest population to smallest.

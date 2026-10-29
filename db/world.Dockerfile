@@ -1,4 +1,4 @@
-FROM mysql
+FROM mysql:8.0
 WORKDIR /tmp
 RUN printf '[mysql]\ncommands=ON\n' > /etc/mysql/conf.d/enable-commands.cnf
 COPY world_db/*.sql /docker-entrypoint-initdb.d/
