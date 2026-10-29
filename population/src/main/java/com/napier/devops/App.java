@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Population reports. Each report method has a comment where its SQL should go.
@@ -37,130 +38,130 @@ public class App {
                 // Change this block to test a report. Call the report method, then its print method.
                 // Report 1: all countries in the world.
                 System.out.println("Report 1: all countries in the world");
-                ArrayList<Country> countries = app.allCountriesInWorld();
+                List<Country> countries = app.allCountriesInWorld();
                 app.printCountryReport(countries);
 
                 // Report 2: countries in a continent. Change "Europe" to the continent to test.
                 System.out.println("\n \n Report 2: countries in a continent");
-                ArrayList<Country> continentCountries = app.countriesInContinent("Europe");
+                List<Country> continentCountries = app.countriesInContinent("Europe");
                 app.printCountryReport(continentCountries);
 
                 // Report 3: countries in a region.
                 System.out.println("\n \n Report 3: countries in a region");
-                ArrayList<Country> regionCountries = app.countriesInRegion("Southern and Central Asia");
+                List<Country> regionCountries = app.countriesInRegion("Southern and Central Asia");
                 app.printCountryReport(regionCountries);
 
                 // Report 4: top N countries in the world. Change 10 to the N to test.
                 System.out.println("\n \n Report 4: top N countries in the world");
-                ArrayList<Country> topCountries = app.topCountriesInWorld(10);
+                List<Country> topCountries = app.topCountriesInWorld(10);
                 app.printCountryReport(topCountries);
 
                 // Report 5: top N countries in the continent.
                 // Change "Asia" to the continent and 10 to the N to test.
                 System.out.println("\n \n Report 5: top N countries in the continent.");
-                ArrayList<Country> topCountriesInContinent = app.topCountriesInContinent("Asia", 10);
+                List<Country> topCountriesInContinent = app.topCountriesInContinent("Asia", 10);
                 app.printCountryReport(topCountriesInContinent);
 
                 // Report 6: top N countries in a region.
                 // Change "Southern and Central Asia" to the region and 10 to the N to test.
                 System.out.println("\n \n Report 6: top N countries in a region.");
-                ArrayList<Country> topCountriesInRegion =
+                List<Country> topCountriesInRegion =
                         app.topCountriesInRegion("Southern and Central Asia", 10);
                 app.printCountryReport(topCountriesInRegion);
 
                 // Report 7: all cities in the world organised by largest population to smallest.
                 System.out.println("\n \n Report 7: All the cities in the world organised by largest population to smallest.");
-                ArrayList<City> allCities = app.allCitiesInWorld();
+                List<City> allCities = app.allCitiesInWorld();
                 app.printCityReport(allCities);
 
                 // Report 8: cities in a continent. Change "Europe" to the continent to test.
                 System.out.println("\n \n Report 8: cities in a continent");
-                ArrayList<City> continentCities = app.citiesInContinent("Europe");
+                List<City> continentCities = app.citiesInContinent("Europe");
                 app.printCityReport(continentCities);
 
                 // Report 9: cities in a region. Change the region name to test.
                 System.out.println("\n \n Report 9: cities in a region");
-                ArrayList<City> regionCities = app.citiesInRegion("British Islands");
+                List<City> regionCities = app.citiesInRegion("British Islands");
                 app.printCityReport(regionCities);
 
                 // Report 10: cities in a country. Change the country name to test.
                 System.out.println("\n \n Report 10: cities in a country");
-                ArrayList<City> countryCities = app.citiesInCountry("United Kingdom");
+                List<City> countryCities = app.citiesInCountry("United Kingdom");
                 app.printCityReport(countryCities);
 
                 // Report 11: cities in a district. Change the district name to test.
                 System.out.println("\n \n Report 11: cities in a district");
-                ArrayList<City> districtCities = app.citiesInDistrict("England");
+                List<City> districtCities = app.citiesInDistrict("England");
                 app.printCityReport(districtCities);
 
                 //Report 12: Top N cities in the world.
                 System.out.println("\n \nReport 12: top N cities in the world");
-                ArrayList<City> topCities = app.topCitiesInWorld(10);
+                List<City> topCities = app.topCitiesInWorld(10);
                 app.printCityReport(topCities);
 
                 // Report 13: top N cities in a continent. Change the continent and N to test.
                 System.out.println("\n \n Report 13: top N cities in a continent");
-                ArrayList<City> topContinentCities = app.topCitiesInContinent("Asia", 10);
+                List<City> topContinentCities = app.topCitiesInContinent("Asia", 10);
                 app.printCityReport(topContinentCities);
 
                 // Report 14: top N cities in a region. Change the region and N to test.
                 System.out.println("\n \n Report 14: top N cities in a region");
-                ArrayList<City> topRegionCities = app.topCitiesInRegion("British Islands", 10);
+                List<City> topRegionCities = app.topCitiesInRegion("British Islands", 10);
                 app.printCityReport(topRegionCities);
 
                 // Report 15: top N cities in a country. Change the country and N to test.
                 System.out.println("\n \n Report 15: top N cities in a country");
-                ArrayList<City> topCountryCities = app.topCitiesInCountry("United Kingdom", 10);
+                List<City> topCountryCities = app.topCitiesInCountry("United Kingdom", 10);
                 app.printCityReport(topCountryCities);
 
                 // Report 16: top N cities in a district. Change the district and N to test.
                 System.out.println("\n \n Report 16: top N cities in a district");
-                ArrayList<City> topDistrictCities = app.topCitiesInDistrict("England", 10);
+                List<City> topDistrictCities = app.topCitiesInDistrict("England", 10);
                 app.printCityReport(topDistrictCities);
 
                 // Report 17: all capital cities in the world.
                 System.out.println("\n \n Report 17: all capital cities in the world");
-                ArrayList<City> capitals = app.allCapitalsInWorld();
+                List<City> capitals = app.allCapitalsInWorld();
                 app.printCapitalReport(capitals);
 
                 // Report 18: capital cities in a continent. Change the continent to test.
                 System.out.println("\n \n Report 18: capital cities in a continent");
-                ArrayList<City> continentCapitals = app.capitalsInContinent("Europe");
+                List<City> continentCapitals = app.capitalsInContinent("Europe");
                 app.printCapitalReport(continentCapitals);
 
                 // Report 19: capital cities in a region. Change the region to test.
                 System.out.println("\n \n Report 19: capital cities in a region");
-                ArrayList<City> regionCapitals = app.capitalsInRegion("British Islands");
+                List<City> regionCapitals = app.capitalsInRegion("British Islands");
                 app.printCapitalReport(regionCapitals);
 
                 // Report 20: top N capital cities in the world. Change 10 to the N to test.
                 System.out.println("\n \n Report 20: top N capital cities in the world");
-                ArrayList<City> topCapitals = app.topCapitalsInWorld(10);
+                List<City> topCapitals = app.topCapitalsInWorld(10);
                 app.printCapitalReport(topCapitals);
 
                 // Report 21: top N capital cities in a continent. Change the continent and N to test.
                 System.out.println("\n \n Report 21: top N capital cities in a continent");
-                ArrayList<City> topContinentCapitals = app.topCapitalsInContinent("Asia", 10);
+                List<City> topContinentCapitals = app.topCapitalsInContinent("Asia", 10);
                 app.printCapitalReport(topContinentCapitals);
 
                 // Report 22: top N capital cities in a region. Change the region and N to test.
                 System.out.println("\n \n Report 22: top N capital cities in a region");
-                ArrayList<City> topRegionCapitals = app.topCapitalsInRegion("British Islands", 10);
+                List<City> topRegionCapitals = app.topCapitalsInRegion("British Islands", 10);
                 app.printCapitalReport(topRegionCapitals);
 
                 // Report 23: population in cities and not in cities, for each continent.
                 System.out.println("\n \n Report 23: population by continent");
-                ArrayList<Population> continentPopulations = app.populationByContinent();
+                List<Population> continentPopulations = app.populationByContinent();
                 app.printPopulationReport(continentPopulations);
 
                 // Report 24: population in cities and not in cities, for each region.
                 System.out.println("\n \n Report 24: population by region");
-                ArrayList<Population> regionPopulations = app.populationByRegion();
+                List<Population> regionPopulations = app.populationByRegion();
                 app.printPopulationReport(regionPopulations);
 
                 // Report 25: Population by country.
                 System.out.println("\n\nReport 25: Population by country");
-                ArrayList<Population> populations = app.populationByCountry();
+                List<Population> populations = app.populationByCountry();
                 app.printPopulationReport(populations);
 
                 // Report 26: Population by the world
@@ -230,7 +231,7 @@ public class App {
 
                 // Report 32: speakers of Chinese, English, Hindi, Spanish and Arabic.
                 System.out.println("\n\nReport 32: language speakers");
-                ArrayList<Language> languages = app.languageSpeakers();
+                List<Language> languages = app.languageSpeakers();
                 app.printLanguageReport(languages);
 
             } catch (Exception e) {
@@ -241,7 +242,7 @@ public class App {
         }
     }
 
-    public void printCountryReport(ArrayList<Country> countries) {
+    public void printCountryReport(List<Country> countries) {
         if (countries == null) {
             System.out.println("No country report produced");
             return;
@@ -260,7 +261,7 @@ public class App {
         }
     }
 
-    public void printCityReport(ArrayList<City> cities) {
+    public void printCityReport(List<City> cities) {
         if (cities == null) {
             System.out.println("No city report produced");
             return;
@@ -277,7 +278,7 @@ public class App {
         }
     }
 
-    public void printCapitalReport(ArrayList<City> capitals) {
+    public void printCapitalReport(List<City> capitals) {
         if (capitals == null) {
             System.out.println("No capital city report produced");
             return;
@@ -293,7 +294,7 @@ public class App {
         }
     }
 
-    public void printPopulationReport(ArrayList<Population> populations) {
+    public void printPopulationReport(List<Population> populations) {
         if (populations == null) {
             System.out.println("No population report produced");
             return;
@@ -323,7 +324,7 @@ public class App {
         }
     }
 
-    public void printLanguageReport(ArrayList<Language> languages) {
+    public void printLanguageReport(List<Language> languages) {
         if (languages == null) {
             System.out.println("No language report produced");
             return;
@@ -340,8 +341,8 @@ public class App {
     }
 
     // 1. All countries in the world, largest population to smallest.
-    public ArrayList<Country> allCountriesInWorld() {
-        ArrayList<Country> countries = new ArrayList<>();
+    public List<Country> allCountriesInWorld() {
+        List<Country> countries = new ArrayList<>();
         try {
             Statement stmt = con.createStatement();
             String sql =
@@ -368,8 +369,8 @@ public class App {
     }
 
     // 2. All countries in a continent largest population to smallest.
-    public ArrayList<Country> countriesInContinent(String continent) {
-        ArrayList<Country> countries = new ArrayList<>();
+    public List<Country> countriesInContinent(String continent) {
+        List<Country> countries = new ArrayList<>();
         try {
             String sql =
                     "SELECT country.Code, country.Name, country.Continent, country.Region, "
@@ -400,8 +401,8 @@ public class App {
     // 3. All countries in a region, largest population to smallest.
     // SQL: same country columns, where region = region, order by population desc.
     // return null if error, else return ArrayList of countries.
-    public ArrayList<Country> countriesInRegion(String region) {
-        ArrayList<Country> countries = new ArrayList<>();
+    public List<Country> countriesInRegion(String region) {
+        List<Country> countries = new ArrayList<>();
         try {
             // retrive data from Region, population in descending order
             String sql =
@@ -431,8 +432,8 @@ public class App {
     }
 
     // 4. Top N countries in the world.
-    public ArrayList<Country> topCountriesInWorld(int n) {
-        ArrayList<Country> countries = new ArrayList<>();
+    public List<Country> topCountriesInWorld(int n) {
+        List<Country> countries = new ArrayList<>();
         try {
             String sql =
                     "SELECT country.Code, country.Name, country.Continent, country.Region, "
@@ -461,8 +462,8 @@ public class App {
     }
 
     // 5. Top N countries in a continent.
-    public ArrayList<Country> topCountriesInContinent(String continent, int n) {
-        ArrayList<Country> countries = new ArrayList<>();
+    public List<Country> topCountriesInContinent(String continent, int n) {
+        List<Country> countries = new ArrayList<>();
         try {
             String sql =
                     "SELECT country.Code, country.Name, country.Continent, country.Region, "
@@ -493,7 +494,7 @@ public class App {
     }
 
     // 6. Top N countries in a region.
-    public ArrayList<Country> topCountriesInRegion(String region, int n) {
+    public List<Country> topCountriesInRegion(String region, int n) {
         if (region == null || region.trim().isEmpty()) {
             System.out.println("A region must be provided");
             return null;
@@ -503,7 +504,7 @@ public class App {
             return null;
         }
 
-        ArrayList<Country> countries = new ArrayList<>();
+        List<Country> countries = new ArrayList<>();
         try {
             String sql =
                     "SELECT country.Code, country.Name, country.Continent, country.Region, "
@@ -538,9 +539,9 @@ public class App {
     }
 
     // 7. All cities in the world, largest population to smallest.
-    public ArrayList<City> allCitiesInWorld()
+    public List<City> allCitiesInWorld()
     {
-        ArrayList<City> cities = new ArrayList<>();
+        List<City> cities = new ArrayList<>();
         try
         {
             Statement stmt = con.createStatement();
@@ -571,8 +572,8 @@ public class App {
     }
 
     // 8. All cities in a continent, largest population to smallest.
-    public ArrayList<City> citiesInContinent(String continent) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> citiesInContinent(String continent) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -601,8 +602,8 @@ public class App {
     }
 
     // 9. All cities in a region, largest population to smallest.
-    public ArrayList<City> citiesInRegion(String region) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> citiesInRegion(String region) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -631,8 +632,8 @@ public class App {
     }
 
     // 10. All cities in a country, largest population to smallest.
-    public ArrayList<City> citiesInCountry(String country) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> citiesInCountry(String country) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -661,8 +662,8 @@ public class App {
     }
 
     // 11. All cities in a district, largest population to smallest.
-    public ArrayList<City> citiesInDistrict(String district) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> citiesInDistrict(String district) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -691,48 +692,38 @@ public class App {
     }
 
     // 12. Top N cities in the world.
-    public ArrayList<City> topCitiesInWorld(int n) {
-        if (n <= 0) {
-            System.out.println("N must be a positive whole number");
-            return null;
-        }
-
-        ArrayList<City> cities = new ArrayList<>();
-
-        String sql =
-                "SELECT city.ID, city.Name, city.CountryCode, " +
-                        "country.Name AS CountryName, city.District, city.Population " +
-                        "FROM city " +
-                        "JOIN country ON city.CountryCode = country.Code " +
-                        "ORDER BY city.Population DESC, city.Name ASC " +
-                        "LIMIT ?";
-
-        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+    public List<City> topCitiesInWorld(int n) {
+        List<City> cities = new ArrayList<>();
+        try {
+            String sql =
+                    "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
+                            + "city.District, city.Population "
+                            + "FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "ORDER BY city.Population DESC "
+                            + "LIMIT ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, n);
-
-            try (ResultSet rset = stmt.executeQuery()) {
-                while (rset.next()) {
-                    cities.add(new City(
-                            rset.getLong("ID"),
-                            rset.getString("Name"),
-                            rset.getString("CountryCode"),
-                            rset.getString("CountryName"),
-                            rset.getString("District"),
-                            rset.getLong("Population")
-                    ));
-                }
+            ResultSet rset = stmt.executeQuery();
+            while (rset.next()) {
+                cities.add(new City(
+                        rset.getLong("ID"),
+                        rset.getString("Name"),
+                        rset.getString("CountryCode"),
+                        rset.getString("CountryName"),
+                        rset.getString("District"),
+                        rset.getLong("Population")));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }
-
         return cities;
     }
 
     // 13. Top N cities in a continent.
-    public ArrayList<City> topCitiesInContinent(String continent, int n) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> topCitiesInContinent(String continent, int n) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -763,8 +754,8 @@ public class App {
     }
 
     // 14. Top N cities in a region.
-    public ArrayList<City> topCitiesInRegion(String region, int n) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> topCitiesInRegion(String region, int n) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -795,8 +786,8 @@ public class App {
     }
 
     // 15. Top N cities in a country.
-    public ArrayList<City> topCitiesInCountry(String country, int n) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> topCitiesInCountry(String country, int n) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -827,8 +818,8 @@ public class App {
     }
 
     // 16. Top N cities in a district.
-    public ArrayList<City> topCitiesInDistrict(String district, int n) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> topCitiesInDistrict(String district, int n) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -859,8 +850,8 @@ public class App {
     }
 
     // 17. All capital cities in the world, largest population to smallest.
-    public ArrayList<City> allCapitalsInWorld() {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> allCapitalsInWorld() {
+        List<City> cities = new ArrayList<>();
         try {
             Statement stmt = con.createStatement();
             String sql =
@@ -887,8 +878,8 @@ public class App {
     }
 
     // 18. All capital cities in a continent, largest population to smallest.
-    public ArrayList<City> capitalsInContinent(String continent) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> capitalsInContinent(String continent) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -917,8 +908,8 @@ public class App {
     }
 
     // 19. All capital cities in a region, largest population to smallest.
-    public ArrayList<City> capitalsInRegion(String region) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> capitalsInRegion(String region) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -947,8 +938,8 @@ public class App {
     }
 
     // 20. Top N capital cities in the world.
-    public ArrayList<City> topCapitalsInWorld(int n) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> topCapitalsInWorld(int n) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -977,8 +968,8 @@ public class App {
     }
 
     // 21. Top N capital cities in a continent.
-    public ArrayList<City> topCapitalsInContinent(String continent, int n) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> topCapitalsInContinent(String continent, int n) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -1009,8 +1000,8 @@ public class App {
     }
 
     // 22. Top N capital cities in a region.
-    public ArrayList<City> topCapitalsInRegion(String region, int n) {
-        ArrayList<City> cities = new ArrayList<>();
+    public List<City> topCapitalsInRegion(String region, int n) {
+        List<City> cities = new ArrayList<>();
         try {
             String sql =
                     "SELECT city.ID, city.Name, city.CountryCode, country.Name AS CountryName, "
@@ -1041,8 +1032,8 @@ public class App {
     }
 
     // 23. Population in cities and not in cities, for each continent.
-    public ArrayList<Population> populationByContinent() {
-        ArrayList<Population> populations = new ArrayList<>();
+    public List<Population> populationByContinent() {
+        List<Population> populations = new ArrayList<>();
         String sql =
                 "SELECT country.Continent AS Name, "
                         + "SUM(country.Population) AS TotalPopulation, "
@@ -1079,8 +1070,8 @@ public class App {
     }
 
     // 24. Population in cities and not in cities, for each region.
-    public ArrayList<Population> populationByRegion() {
-        ArrayList<Population> populations = new ArrayList<>();
+    public List<Population> populationByRegion() {
+        List<Population> populations = new ArrayList<>();
         String sql =
                 "SELECT country.Region AS Name, "
                         + "SUM(country.Population) AS TotalPopulation, "
@@ -1117,8 +1108,8 @@ public class App {
     }
 
     // 25. Population in cities and not in cities, for each country.
-    public ArrayList<Population> populationByCountry() {
-        ArrayList<Population> populations = new ArrayList<>();
+    public List<Population> populationByCountry() {
+        List<Population> populations = new ArrayList<>();
 
         String sql =
                 "SELECT country.Name AS CountryName, " +
@@ -1319,7 +1310,7 @@ public class App {
             sql.append(" AND District = ?");
         }
 
-        ArrayList<City> matches = new ArrayList<>();
+        List<City> matches = new ArrayList<>();
         try (PreparedStatement stmt = con.prepareStatement(sql.toString())) {
             int parameter = 1;
             stmt.setString(parameter++, city);
@@ -1381,8 +1372,8 @@ public class App {
     }
 
     // 32. Speakers of Chinese, English, Hindi, Spanish and Arabic, with world percentage.
-    public ArrayList<Language> languageSpeakers() {
-        ArrayList<Language> languages = new ArrayList<>();
+    public List<Language> languageSpeakers() {
+        List<Language> languages = new ArrayList<>();
         String sql =
                 "SELECT countrylanguage.Language, "
                         + "ROUND(SUM(country.Population * countrylanguage.Percentage / 100)) AS Speakers, "

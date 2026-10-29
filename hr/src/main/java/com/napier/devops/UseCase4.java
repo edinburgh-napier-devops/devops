@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UseCase4 {
     private static final String CURRENT_ROLE_SALARIES_SQL =
@@ -32,7 +33,7 @@ public class UseCase4 {
      * @param roleName role (title) to include in the report
      * @return employees of the role, or null if the query fails
      */
-    public ArrayList<Employee> getSalariesByRole(String roleName)
+    public List<Employee> getSalariesByRole(String roleName)
     {
         try (PreparedStatement stmt = con.prepareStatement(CURRENT_ROLE_SALARIES_SQL))
         {
@@ -40,7 +41,7 @@ public class UseCase4 {
 
             try (ResultSet rset = stmt.executeQuery())
             {
-                ArrayList<Employee> employees = new ArrayList<>();
+                List<Employee> employees = new ArrayList<>();
                 while (rset.next())
                 {
                     employees.add(toEmployee(rset));
@@ -62,7 +63,7 @@ public class UseCase4 {
      * @param employees employees returned by {@link #getSalariesByRole(String)}
      * @param roleName role name
      */
-    public void printSalaries(ArrayList<Employee> employees, String roleName)
+    public void printSalaries(List<Employee> employees, String roleName)
     {
         if (employees == null || employees.isEmpty())
         {

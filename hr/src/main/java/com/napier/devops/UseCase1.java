@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UseCase1
 {
@@ -14,7 +15,7 @@ public class UseCase1
         this.con = con;
     }
 
-    public ArrayList<Employee> getAllSalaries()
+    public List<Employee> getAllSalaries()
     {
         try
         {
@@ -26,7 +27,7 @@ public class UseCase1
                             + "ORDER BY employees.emp_no ASC";
             ResultSet rset = stmt.executeQuery(strSelect);
 
-            ArrayList<Employee> employees = new ArrayList<Employee>();
+            List<Employee> employees = new ArrayList<Employee>();
             while (rset.next())
             {
                 Employee emp = new Employee();
@@ -50,7 +51,7 @@ public class UseCase1
      * Prints a list of employees.
      * @param employees The list of employees to print.
      */
-    public void printSalaries(ArrayList<Employee> employees)
+    public void printSalaries(List<Employee> employees)
     {
         if (employees == null)
         {

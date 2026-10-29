@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Produces salary reports for employees in a selected department.
@@ -23,7 +24,7 @@ public class UseCase2
      * @param departmentName department to include in the report
      * @return employees in the department, or {@code null} if the query fails
      */
-    public ArrayList<Employee> getSalariesByDepartment(String departmentName)
+    public List<Employee> getSalariesByDepartment(String departmentName)
     {
         String strSelect =
                 "SELECT e.emp_no, e.first_name, e.last_name, s.salary "
@@ -43,7 +44,7 @@ public class UseCase2
 
             try (ResultSet rset = stmt.executeQuery())
             {
-                ArrayList<Employee> employees = new ArrayList<Employee>();
+                List<Employee> employees = new ArrayList<Employee>();
                 while (rset.next())
                 {
                     Employee emp = new Employee();
@@ -70,7 +71,7 @@ public class UseCase2
      * @param employees employees returned by {@link #getSalariesByDepartment(String)}
      * @param departmentName department included in the report
      */
-    public void printSalaries(ArrayList<Employee> employees, String departmentName)
+    public void printSalaries(List<Employee> employees, String departmentName)
     {
         if (employees == null || employees.isEmpty())
         {

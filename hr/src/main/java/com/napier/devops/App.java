@@ -2,12 +2,12 @@ package com.napier.devops;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 public class App
 {
     public static void main(String[] args)
     {
-        App a = new App();
         DBConnection dbConnection = new DBConnection();
 
         try
@@ -31,7 +31,7 @@ public class App
                     UseCase4 useCase4 = new UseCase4(connection);
                     String roleName = args.length > 0 ? args[0] : "Technique Leader";
 
-                    ArrayList<Employee> roleEmployees =
+                    List<Employee> roleEmployees =
                             useCase4.getSalariesByRole(roleName);
                     useCase4.printSalaries(roleEmployees, roleName);
                     if (roleEmployees != null)
