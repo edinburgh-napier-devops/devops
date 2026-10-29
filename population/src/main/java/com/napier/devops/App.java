@@ -191,6 +191,18 @@ public class App
                             "Population of western Europe: " + population);
                 }
 
+                // Report 29: Population of a country.
+                String reportCountry = "United Kingdom";
+                System.out.println("\n Report 29: Population of a country");
+
+                long countryPop = app.countryPopulation(reportCountry);
+
+                if (countryPop > 0)
+                {
+                    System.out.printf("Population of %s: %,d%n",
+                            reportCountry, countryPop);
+                }
+
                 // Report 31: identify one city by name and location.
                 String reportCity = "London";
                 String reportCountryCode = "GBR";
@@ -1344,9 +1356,43 @@ public class App
     // 29. Population of a country.
     public long countryPopulation(String country)
     {
-        // SQL: country.population where name = country.
-        return 0;
+        if (country == null || country.trim().isEmpty())
+        {
+            System.out.println("A country must be provided");
+            return 0;
+        }
+
+        String sql =
+                "SELECT Population FROM country WHERE Name = ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setString(1, country.trim());
+
+            try (ResultSet rset = stmt.executeQuery())
+            {
+                if (rset.next())
+                {
+                    long population = rset.getLong("Population");
+
+                    if (!rset.wasNull())
+                    {
+                        return population;
+                    }
+                }
+
+                System.out.println("Country not found: " + country);
+                return 0;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Could not retrieve country population: "
+                    + e.getMessage());
+            return 0;
+        }
     }
+
 
     // 30. Population of a district.
     public long districtPopulation(String district)
