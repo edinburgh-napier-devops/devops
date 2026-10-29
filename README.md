@@ -16,7 +16,7 @@
 ## Report Evidence
 `Met` is confirmed only when the report has been run and its output captured. `Pending verification` means an implementation exists but its required output screenshot has not yet been committed. `No` means the report is not implemented on this branch. Screenshot links are shown only for files actually present in `reports/`.
 
-**29 requirements of 32 have been implemented, which is 91%.**
+**30 requirements of 32 have been implemented, which is 93.75%.**
 
 | ID | Name | Met | Screenshot |
 |---|---|---|---|
@@ -26,7 +26,7 @@
 | 4 | The top N populated countries in the world where N is provided by the user. | Yes | [report-04-top-countries-world.png](reports/report-04-top-countries-world.png) |
 | 5 | The top N populated countries in a continent where N is provided by the user. | Yes | [report-05-top-countries-continent.png](reports/report-05-top-countries-continent.png) |
 | 6 | The top N populated countries in a region where N is provided by the user. | Yes | [report-06-top-countries-region.png](reports/report-06-top-countries-region.png) |
-| 7 | All the cities in the world organised by largest population to smallest. | No | [report-07-cities-world.png](reports/report-07-cities-world.png) |
+| 7 | All the cities in the world organised by largest population to smallest. | Yes | [report-07-cities-world.png](reports/report-07-cities-world.png) |
 | 8 | All the cities in a continent organised by largest population to smallest. | Yes | [report-08-cities-continent.png](reports/report-08-cities-continent.png) |
 | 9 | All the cities in a region organised by largest population to smallest. | Yes | [report-09-cities-region.png](reports/report-09-cities-region.png) |
 | 10 | All the cities in a country organised by largest population to smallest. | Yes | [report-10-cities-country.png](reports/report-10-cities-country.png) |
