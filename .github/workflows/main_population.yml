@@ -49,7 +49,7 @@ jobs:
         run: docker compose down
 
   build:
-    name: Build and run population module
+    name: Build Run in Docker and Deploy Release
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -75,6 +75,14 @@ jobs:
         with:
           name: population-jar
           path: "population/target/*-jar-with-dependencies.jar"
+      - name: Deploy Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: "latest"
+          files: |
+            population/target/*-jar-with-dependencies.jar
       - name: Stop database
         if: always()
         run: docker compose down
