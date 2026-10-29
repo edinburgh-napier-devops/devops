@@ -16,7 +16,7 @@
 ## Report Evidence
 `Met` is confirmed only when the report has been run and its output captured. `Pending verification` means an implementation exists but its required output screenshot has not yet been committed. `No` means the report is not implemented on this branch. Screenshot links are shown only for files actually present in `reports/`.
 
-**30 requirements of 32 have been implemented, which is 93.75%.**
+**32 requirements of 32 have been implemented, which is 100%.**
 
 | ID | Name | Met | Screenshot |
 |---|---|---|---|
@@ -49,7 +49,7 @@
 | 27 | The population of a continent. | Yes | [report-27-population-continent.png](reports/report-27-population-continent.png) |
 | 28 | The population of a region. | Yes | [report-28-population-region.png](reports/report-28-population-region.png) |
 | 29 | The population of a country. | Yes | [report-29-population-country.png](reports/report-29-population-country.png) |
-| 30 | The population of a district. | No | [report-30-population-district.png](reports/report-30-population-district.png) |
+| 30 | The population of a district. | Yes | [report-30-population-district.png](reports/report-30-population-district.png) |
 | 31 | The population of a city. | Yes | [report-31-population-city.png](reports/report-31-population-city.png) |
 | 32 | The number of people who speak Chinese, English, Hindi, Spanish and Arabic, from greatest number to smallest, including the percentage of the world population. | Yes | [report-32-language-speakers.png](reports/report-32-language-speakers.png) |
 
