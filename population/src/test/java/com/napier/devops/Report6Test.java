@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -46,7 +46,7 @@ class Report6Test
     @Test
     void returnsCountriesFromRequestedRegion()
     {
-        ArrayList<Country> countries = app.topCountriesInRegion("Southern and Central Asia", 10);
+        List<Country> countries = app.topCountriesInRegion("Southern and Central Asia", 10);
 
         assertNotNull(countries);
         assertEquals(2, countries.size());
@@ -61,7 +61,7 @@ class Report6Test
     @Test
     void limitsResultsAfterOrderingByPopulation()
     {
-        ArrayList<Country> countries = app.topCountriesInRegion("Southern and Central Asia", 1);
+        List<Country> countries = app.topCountriesInRegion("Southern and Central Asia", 1);
 
         assertNotNull(countries);
         assertEquals(1, countries.size());
