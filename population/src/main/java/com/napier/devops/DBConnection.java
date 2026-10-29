@@ -8,6 +8,13 @@ public class DBConnection
 {
     public Connection connect()
     {
+        String host = System.getenv().getOrDefault("DB_HOST", "world-db");
+        String port = System.getenv().getOrDefault("DB_PORT", "3306");
+        return connect(host + ":" + port, 30000);
+    }
+
+    public Connection connect(String location, int delay)
+    {
         try
         {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -24,11 +31,9 @@ public class DBConnection
             System.out.println("Connecting to database...");
             try
             {
-                Thread.sleep(30000);
-                String host = System.getenv().getOrDefault("DB_HOST", "world-db");
-                String port = System.getenv().getOrDefault("DB_PORT", "3306");
+                Thread.sleep(delay);
                 return DriverManager.getConnection(
-                        "jdbc:mysql://" + host + ":" + port + "/world?useSSL=false&allowPublicKeyRetrieval=true",
+                        "jdbc:mysql://" + location + "/world?useSSL=false&allowPublicKeyRetrieval=true",
                         "root",
                         "example");
             }
