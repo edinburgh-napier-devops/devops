@@ -49,8 +49,10 @@ jobs:
         run: docker compose down
 
   build:
-    name: Build and run population module
+    name: Build Run in Docker and Deploy Release
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -70,11 +72,14 @@ jobs:
         env:
           DB_HOST: localhost
           DB_PORT: "33061"
-      - name: Upload jar
-        uses: actions/upload-artifact@v4
+      - name: Deploy Release
+        uses: marvinpinto/action-automatic-releases@latest
         with:
-          name: population-jar
-          path: "population/target/*-jar-with-dependencies.jar"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: "latest"
+          files: |
+            population/target/*-jar-with-dependencies.jar
       - name: Stop database
         if: always()
         run: docker compose down
