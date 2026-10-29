@@ -249,6 +249,7 @@ public class App {
         System.out.println(String.format("%-5s %-45s %-20s %-30s %-15s %s",
                 "Code", "Name", "Continent", "Region", "Population", "Capital"));
         for (Country country : countries) {
+            if (country == null) continue;
             System.out.println(String.format("%-5s %-45s %-20s %-30s %-15d %s",
                     country.getCode(),
                     country.getName(),
@@ -267,6 +268,7 @@ public class App {
         System.out.println(String.format("%-40s %-40s %-25s %s",
                 "Name", "Country", "District", "Population"));
         for (City city : cities) {
+            if (city == null) continue;
             System.out.println(String.format("%-40s %-40s %-25s %d",
                     city.getName(),
                     city.getCountryName(),
@@ -283,6 +285,7 @@ public class App {
         System.out.println(String.format("%-40s %-40s %s",
                 "Name", "Country", "Population"));
         for (City city : capitals) {
+            if (city == null) continue;
             System.out.println(String.format("%-40s %-40s %d",
                     city.getName(),
                     city.getCountryName(),
@@ -307,6 +310,7 @@ public class App {
         ));
 
         for (Population population : populations) {
+            if (population == null) continue;
             System.out.println(String.format(
                     "%-35s %18d %18d %11.2f%% %18d %11.2f%%",
                     population.getName(),
@@ -327,6 +331,7 @@ public class App {
         System.out.println(String.format("%-15s %18s %18s",
                 "Language", "Speakers", "% of World"));
         for (Language language : languages) {
+            if (language == null) continue;
             System.out.println(String.format("%-15s %18d %17.2f%%",
                     language.getLanguage(),
                     language.getSpeakers(),
